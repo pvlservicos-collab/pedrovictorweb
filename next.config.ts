@@ -6,6 +6,9 @@ const config: NextConfig = {
   // pra ca (vercel.json da raiz do repo). Ver src/lib/base-path.ts.
   basePath: BASE_PATH,
   reactStrictMode: true,
+  // O site (HTML estatico) mora em public/site e e servido na raiz do dominio
+  // pelos rewrites do vercel.json -- o Next nao aceita rewrite interno pra fora
+  // do basePath.
   eslint: { ignoreDuringBuilds: true },
   typescript: { ignoreBuildErrors: true },
   images: {

@@ -54,6 +54,9 @@ export function middleware(req: NextRequest) {
     // o matcher abaixo só livra _next/static e afins, então sem isso qualquer imagem
     // usada numa tela sem sessão (ex: login) cairia no redirect também.
     '/logos/', '/fonts/', '/chat-bg.svg',
+    // O site institucional (public/site, servido na raiz do dominio pelos
+    // rewrites do next.config.ts) e publico.
+    '/site/',
   ]
   // A entrada automatica mora dentro de /api/auth mas NAO e publica: ela loga
   // quem chegar, entao so passa depois da senha da porta (logo abaixo).

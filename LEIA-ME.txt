@@ -2,17 +2,13 @@ PVL WEBDESIGN — PORTFOLIO
 =========================
 
 CONTEUDO
-  index.html      pagina completa (HTML + CSS + JS em um arquivo so)
-  assets/         logo, retrato, mockups e screenshots dos projetos
+  public/site/index.html  pagina completa (HTML + CSS + JS em um arquivo so)
+  public/site/assets/     logo, retrato, mockups e screenshots dos projetos
 
 COMO COLOCAR NO AR
-  1. Envie a pasta inteira (index.html + assets) para a raiz do seu
-     servidor / hospedagem. A estrutura de pastas precisa ser mantida.
-  2. Nao precisa de build, banco de dados nem servidor node.
-     E um site estatico: funciona em qualquer hospedagem,
-     Netlify, Vercel, GitHub Pages, Hostinger, cPanel etc.
-  3. Para testar no seu computador, basta abrir o index.html
-     com duplo clique.
+  O site faz parte do app Next.js deste repositorio (ver README.md).
+  Todo git push na main publica site e CRM juntos na Vercel.
+  Para testar no computador, abra public/site/index.html com duplo clique.
 
 FONTES
   Michroma (titulos) e Rajdhani (rotulos) + Archivo (texto),

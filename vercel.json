@@ -1,5 +1,23 @@
 {
-  "routes": [
-    { "src": "/crm(/.*)?", "dest": "https://pvl-crm.vercel.app/crm$1" }
+  "framework": "nextjs",
+  "rewrites": [
+    { "source": "/", "destination": "/crm/site/index.html" },
+    { "source": "/index.html", "destination": "/crm/site/index.html" },
+    { "source": "/assets/:path*", "destination": "/crm/site/assets/:path*" },
+    { "source": "/paginas-legais/:path*", "destination": "/crm/site/paginas-legais/:path*" }
+  ],
+  "crons": [
+    {
+      "path": "/crm/api/funnels/tick",
+      "schedule": "* * * * *"
+    },
+    {
+      "path": "/crm/api/integrations/instagram/check-tokens",
+      "schedule": "0 9 * * *"
+    },
+    {
+      "path": "/crm/api/cron/evolution-reconcile",
+      "schedule": "* * * * *"
+    }
   ]
 }
