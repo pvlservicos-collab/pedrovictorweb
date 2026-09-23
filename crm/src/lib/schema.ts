@@ -419,6 +419,24 @@ export const webhookLogs = pgTable('webhook_logs', {
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
 })
 
+// Todo POST da Meta (WhatsApp Cloud / Instagram) com assinatura valida, cru,
+// gravado ANTES de interpretar. O processamento roda depois da resposta 200
+// (ver src/app/api/webhooks/facebook/route.ts) e anota o resultado aqui.
+// max(received_at) e o "ultimo evento recebido": separa "ninguem mandou nada"
+// de "o endpoint morreu".
+export const metaWebhookEvents = pgTable('meta_webhook_events', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  receivedAt: timestamp('received_at', { withTimezone: true }).defaultNow().notNull(),
+  object: text('object'),
+  payload: jsonb('payload').notNull(),
+  // pendente | pausado | processado | erro
+  status: text('status').notNull(),
+  processedAt: timestamp('processed_at', { withTimezone: true }),
+  error: text('error'),
+}, (t) => ({
+  receivedAtIdx: index('meta_webhook_events_received_at_idx').on(t.receivedAt),
+}))
+
 // ── Funil de Mensagens ────────────────────────────────────────────────────────
 // 'lead_site_evento' / 'lead_agenda_ascensao' disparam quando um lead novo entra
 // por /api/ingest/leads (ver src/lib/funnel-triggers.ts). Aplicados no banco por
