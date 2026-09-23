@@ -1,0 +1,5 @@
+{
+  "routes": [
+    { "src": "/crm(/.*)?", "dest": "https://pvl-crm.vercel.app/crm$1" }
+  ]
+}

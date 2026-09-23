@@ -524,6 +524,12 @@ footer{border-top:1px solid var(--line);padding-block:34px}
 .foot{display:flex;flex-wrap:wrap;gap:18px;align-items:center;justify-content:space-between}
 .foot img{width:84px;opacity:.85}
 .foot small{font-family:var(--ui);font-size:.88rem;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-3)}
+.foot-legal{display:flex;flex-wrap:wrap;gap:8px 22px}
+.foot-legal a{font-family:var(--ui);font-size:.86rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-2);text-decoration:none;transition:color .2s}
+.foot-legal a:hover{color:var(--cyan)}
+.foot-company{flex-basis:100%;margin:6px 0 0;padding-top:18px;border-top:1px solid var(--line);font-size:.82rem;line-height:1.7;color:var(--ink-3)}
+.foot-company a{color:var(--ink-2);text-decoration:none}
+.foot-company a:hover{color:var(--cyan)}
 
 /* ---------- responsive ---------- */
 @media (max-width:980px){
@@ -844,7 +850,13 @@ footer{border-top:1px solid var(--line);padding-block:34px}
 <footer>
   <div class="wrap foot">
     <img src="assets/logo.png" alt="PVL Webdesign">
+    <nav class="foot-legal" aria-label="Páginas legais">
+      <a href="paginas-legais/termos-de-uso.html">Termos de Uso</a>
+      <a href="paginas-legais/politica-de-privacidade.html">Privacidade</a>
+      <a href="paginas-legais/exclusao-de-dados.html">Exclusão de Dados</a>
+    </nav>
     <small>© 2026 PVL Webdesign · Pedro Victor</small>
+    <p class="foot-company">PVL Serviços · Pedro Henrique Guedes Victor · CNPJ 38.309.531/0001-33<br>Rua Leopoldo Machado, 2613 – Trem, Macapá/AP – CEP 68.901-130 · <a href="mailto:pvlservicos@gmail.com">pvlservicos@gmail.com</a></p>
   </div>
 </footer>
 

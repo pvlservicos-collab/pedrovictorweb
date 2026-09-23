@@ -1,0 +1,97 @@
+/* Paginas legais — mesma identidade do index.html (tokens copiados do :root de la) */
+:root{
+  color-scheme: dark;
+  --ground:#0E1113;
+  --ground-2:#14191B;
+  --surface:#181E21;
+  --line:#242D31;
+  --line-2:#33403F;
+  --ink:#EDF4F5;
+  --ink-2:#8FA0A4;
+  --ink-3:#5E6D71;
+  --cyan:#00EFFF;
+  --cyan-deep:#0A8798;
+  --display:'Michroma', 'Eurostile', 'Trebuchet MS', sans-serif;
+  --ui:'Rajdhani', 'Trebuchet MS', 'Segoe UI', sans-serif;
+  --body:'Archivo', 'Helvetica Neue', Arial, sans-serif;
+  --maxw:820px;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background:var(--ground);
+  color:var(--ink-2);
+  font-family:var(--body);
+  font-size:16px;
+  line-height:1.7;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+img{display:block;max-width:100%;height:auto}
+a{color:var(--cyan);text-decoration:none;text-underline-offset:3px}
+a:hover{text-decoration:underline}
+:focus-visible{outline:2px solid var(--cyan);outline-offset:3px;border-radius:2px}
+
+.wrap{width:100%;max-width:var(--maxw);margin-inline:auto;padding-inline:clamp(16px,5vw,40px)}
+
+/* ---------- header ---------- */
+.topbar{
+  position:sticky;top:0;z-index:10;
+  background:rgba(14,17,19,.82);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line);
+}
+.topbar-in{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:64px}
+.brand img{width:96px}
+.back{
+  font-family:var(--ui);font-size:.9rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ink-2);
+}
+.back:hover{color:var(--ink);text-decoration:none}
+
+/* ---------- documento ---------- */
+main{padding-block:clamp(48px,8vw,96px)}
+.eyebrow{
+  font-family:var(--ui);font-size:.86rem;font-weight:600;letter-spacing:.26em;text-transform:uppercase;
+  color:var(--ink-3);display:flex;align-items:center;gap:12px;margin:0 0 20px;
+}
+.eyebrow b{color:var(--cyan);font-weight:700}
+.eyebrow::after{content:"";flex:1;height:1px;background:var(--line);max-width:120px}
+h1,h2{font-family:var(--display);font-weight:400;text-transform:uppercase;color:var(--ink);margin:0;text-wrap:balance}
+h1{font-size:clamp(1.4rem,4vw,2.2rem);line-height:1.2;letter-spacing:-.012em}
+.meta{margin:14px 0 0;font-family:var(--ui);font-size:.95rem;font-weight:500;letter-spacing:.06em;color:var(--ink-3)}
+.intro{margin:28px 0 0;font-size:1.05rem;color:var(--ink)}
+
+.company{
+  margin:32px 0 0;padding:clamp(18px,3vw,26px);
+  border:1px solid var(--line-2);background:var(--ground-2);
+  display:grid;grid-template-columns:auto minmax(0,1fr);gap:6px 20px;
+  font-size:.95rem;
+}
+.company dt{font-family:var(--ui);font-weight:700;letter-spacing:.16em;text-transform:uppercase;font-size:.8rem;color:var(--ink-3);padding-top:3px}
+.company dd{margin:0;color:var(--ink)}
+
+section{margin-top:44px;padding-top:28px;border-top:1px solid var(--line)}
+h2{font-size:clamp(.92rem,2vw,1.1rem);line-height:1.35;letter-spacing:.01em}
+h2 span{color:var(--cyan-deep);margin-right:10px}
+p{margin:12px 0 0}
+ul{margin:12px 0 0;padding-left:0;list-style:none}
+li{position:relative;padding-left:20px;margin-top:8px}
+li::before{content:"";position:absolute;left:0;top:.72em;width:8px;height:1px;background:var(--cyan)}
+strong{color:var(--ink);font-weight:600}
+
+/* ---------- footer ---------- */
+footer{border-top:1px solid var(--line);padding-block:30px}
+.foot{display:flex;flex-wrap:wrap;gap:14px 24px;align-items:center;justify-content:space-between}
+.foot nav{display:flex;flex-wrap:wrap;gap:8px 20px}
+.foot nav a,.foot small{font-family:var(--ui);font-size:.86rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase}
+.foot nav a{color:var(--ink-2)}
+.foot nav a:hover,.foot nav a[aria-current]{color:var(--cyan);text-decoration:none}
+.foot small{color:var(--ink-3);font-weight:500}
+
+@media (max-width:560px){
+  .company{grid-template-columns:1fr;gap:2px}
+  .company dd{margin-bottom:10px}
+}
