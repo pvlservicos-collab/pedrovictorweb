@@ -1,4 +1,5 @@
 {
+  "framework": "nextjs",
   "crons": [
     {
       "path": "/crm/api/funnels/tick",

@@ -111,5 +111,7 @@ export function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/((?!_next/static|_next/image|favicon.ico|public/).*)'  ],
+  // '/' explicito: com o basePath, a raiz exata (/crm) nao casa com o padrao de
+  // baixo e passava sem a senha da porta.
+  matcher: ['/', '/((?!_next/static|_next/image|favicon.ico|public/).*)'],
 }
