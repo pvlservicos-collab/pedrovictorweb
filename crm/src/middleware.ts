@@ -98,11 +98,13 @@ export function middleware(req: NextRequest) {
     // *.vercel.app, e um redirect absoluto tiraria a pessoa do dominio. O
     // entrar responde com o redirect certo (origem do AUTH_URL). O pathname
     // do middleware vem sem o /crm; o destino volta com ele.
+    // O destino vai num cabecalho: a query de um rewrite nao chega no handler
+    // (ele ve a da requisicao original), e a pessoa caia sempre no /crm/.
     const entrada = req.nextUrl.clone()
     entrada.pathname = '/api/auth/entrar'
-    entrada.search = ''
-    entrada.searchParams.set('callbackUrl', BASE_PATH + pathname + req.nextUrl.search)
-    return NextResponse.rewrite(entrada)
+    const headers = new Headers(req.headers)
+    headers.set('x-crm-destino', BASE_PATH + pathname + req.nextUrl.search)
+    return NextResponse.rewrite(entrada, { request: { headers } })
   }
 
   return NextResponse.next()

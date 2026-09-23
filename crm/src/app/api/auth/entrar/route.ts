@@ -35,7 +35,8 @@ export async function GET(req: NextRequest) {
 
   // Para onde a pessoa queria ir. So caminho interno: um callbackUrl absoluto
   // viraria redirecionamento aberto, e isto aqui responde sem sessao.
-  const pedido = req.nextUrl.searchParams.get('callbackUrl') || '/'
+  // x-crm-destino vem do middleware (rewrite); callbackUrl, do AuthGuard.
+  const pedido = req.nextUrl.searchParams.get('callbackUrl') || req.headers.get('x-crm-destino') || '/'
   // Chega com o /crm (AuthGuard, middleware) ou sem; sai sempre com ele.
   const destino = comBase(pedido.startsWith('/') && !pedido.startsWith('//') ? pedido : '/')
 
