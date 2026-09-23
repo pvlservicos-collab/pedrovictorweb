@@ -1,0 +1,38 @@
+PVL WEBDESIGN — PORTFOLIO
+=========================
+
+CONTEUDO
+  index.html      pagina completa (HTML + CSS + JS em um arquivo so)
+  assets/         logo, retrato, mockups e screenshots dos projetos
+
+COMO COLOCAR NO AR
+  1. Envie a pasta inteira (index.html + assets) para a raiz do seu
+     servidor / hospedagem. A estrutura de pastas precisa ser mantida.
+  2. Nao precisa de build, banco de dados nem servidor node.
+     E um site estatico: funciona em qualquer hospedagem,
+     Netlify, Vercel, GitHub Pages, Hostinger, cPanel etc.
+  3. Para testar no seu computador, basta abrir o index.html
+     com duplo clique.
+
+FONTES
+  Michroma (titulos) e Rajdhani (rotulos) + Archivo (texto),
+  carregadas do Google Fonts. Precisa de internet para exibir
+  a tipografia correta; offline cai para as fontes de sistema.
+
+O QUE VOCE PROVAVELMENTE VAI QUERER TROCAR
+  - E-mail de contato: procure por "pedrovictor.mkt@gmail.com"
+    (aparece 1 vez, dentro da tag <code id="mail-value">).
+  - Linha de ferramentas: procure por "Ferramentas ·"
+    na secao SOBRE (dobra 04).
+  - WhatsApp / Instagram: o paragrafo <p class="mailnote">
+    na secao CONTATO (dobra 06) esta reservado para isso.
+  - Cores da marca: no topo do <style>, bloco :root
+    (--cyan e o ciano do logo, #00EFFF).
+
+ESTRUTURA DA PAGINA
+  Dobra 01  Topo + cena 3D (notebook a direita, 4 telas na frente)
+  Dobra 02  Cases (2 paginas roláveis de ponta a ponta)
+  Dobra 03  Outros trabalhos
+  Dobra 04  Sobre
+  Dobra 05  Processo
+  Dobra 06  Contato
