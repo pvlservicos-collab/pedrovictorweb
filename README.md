@@ -5,8 +5,11 @@ num app Next.js só, num projeto só na Vercel.
 
 ## Site
 
-O site é HTML estático em `public/site/` (`index.html`, `assets/`, `paginas-legais/`).
-O `vercel.json` serve ele na raiz do domínio (`/`, `/assets/*`, `/paginas-legais/*`).
+O site é HTML estático em `public/site/`: `index.html`, as páginas legais
+(`termos-de-uso.html`, `politica-de-privacidade.html`, `exclusao-de-dados.html`) e
+`assets/`. O `vercel.json` serve tudo na raiz do domínio, com endereços sem `.html`:
+`/`, `/termos-de-uso`, `/politica-de-privacidade`, `/exclusao-de-dados`, `/assets/*`.
+Os endereços antigos (`/paginas-legais/*.html`) redirecionam para os novos.
 Para editar o site, mexa só nesses arquivos.
 
 ## CRM
