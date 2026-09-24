@@ -280,10 +280,11 @@ export function useLeadActivities(organizationId: string, leadId: string) {
   }
 
   const deleteMessage = async (activityId: string, deleteForEveryone: boolean) => {
-    // Optimistic: já mostra o balão "Mensagem apagada" antes da resposta do servidor
+    // Optimistic: a mensagem some da conversa antes da resposta do servidor
+    // (delete_scope é o que o ChatWindow usa pra esconder a apagada pela equipe)
     const prevActivities = activities
     setActivities((prev) =>
-      prev.map((a) => (a.id === activityId ? { ...a, metadata: { ...a.metadata, deleted: true } } : a))
+      prev.map((a) => (a.id === activityId ? { ...a, metadata: { ...a.metadata, deleted: true, delete_scope: deleteForEveryone ? 'everyone' : 'me' } } : a))
     )
 
     try {

@@ -1,5 +1,5 @@
 /**
- * Biblioteca de elementos do ImobEasy CRM.
+ * Biblioteca de elementos do PVL CRM.
  *
  * Camada fina em cima das classes de `globals.css` (.glass*, .btn*, .pill,
  * .field, .surface-*). O CSS é a fonte da verdade visual; o que estes

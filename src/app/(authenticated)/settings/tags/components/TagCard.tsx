@@ -9,9 +9,9 @@ const TAG_COLORS = [
     { value: '#10b981', label: 'Verde' },
     { value: '#0ea5e9', label: 'Azul Celeste' },
     { value: '#3b82f6', label: 'Azul' },
-    { value: '#8b5cf6', label: 'Roxo' },
-    { value: '#d946ef', label: 'Fúcsia' },
-    { value: '#ec4899', label: 'Rosa' },
+    { value: '#0AAEFF', label: 'Roxo' },
+    { value: '#00C8FF', label: 'Fúcsia' },
+    { value: '#00C8FF', label: 'Rosa' },
     { value: '#64748b', label: 'Cinza' },
 ]
 

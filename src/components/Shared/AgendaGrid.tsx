@@ -44,7 +44,7 @@ const LARGURA_GUTTER = 44
 const COR_PADRAO = '#9a9a94'
 
 /**
- * `#8b5cf6` → `rgba(139,92,246,.22)`.
+ * `#0AAEFF` → `rgba(26, 184, 255,.22)`.
  *
  * Escrito na mão em vez de `color-mix()` porque a grade roda dentro do CRM que
  * abre em navegador de celular e de máquina antiga; `color-mix` só apareceu no

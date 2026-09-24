@@ -84,7 +84,7 @@ export default function InstallAppBanner() {
         <div className="flex-1 min-w-0">
           {platform === 'android' ? (
             <>
-              <p className="text-sm font-semibold text-ink">Instalar o ImobEasy CRM</p>
+              <p className="text-sm font-semibold text-ink">Instalar o PVL CRM</p>
               <p className="text-xs text-muted mt-0.5">Adicione à tela de início pra abrir como um app, em tela cheia.</p>
               <button
                 onClick={handleInstall}
@@ -96,7 +96,7 @@ export default function InstallAppBanner() {
             </>
           ) : (
             <>
-              <p className="text-sm font-semibold text-ink">Adicione o ImobEasy CRM à tela de início</p>
+              <p className="text-sm font-semibold text-ink">Adicione o PVL CRM à tela de início</p>
               <p className="text-xs text-muted mt-1 flex items-center gap-1 flex-wrap">
                 Toque em <ShareFat size={14} weight="bold" className="text-accent-2" /> Compartilhar e depois em "Adicionar à Tela de Início"
               </p>

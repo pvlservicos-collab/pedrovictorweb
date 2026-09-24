@@ -33,7 +33,7 @@ export const DEFAULT_STAGES: DefaultStage[] = [
   // alguém) realmente falar com ele. Sem esta coluna, o lead nascia em
   // "Contactado por IA" sem ninguém ter contactado nada.
   { key: 'em_aguardo', name: 'Em aguardo', color: '#7b7b76', rank: 0 },
-  { key: 'contactado_ia', name: 'Contactado por IA', color: '#8b5cf6', rank: 1 },
+  { key: 'contactado_ia', name: 'Contactado por IA', color: '#0AAEFF', rank: 1 },
   { key: 'follow_up', name: 'Em follow up', color: '#f59e0b', rank: 2 },
   { key: 'atendimento_humano', name: 'Atendimento por humano', color: '#3987e5', rank: 3 },
   { key: 'comprou', name: 'Comprou produto', color: '#199e70', rank: 4 },

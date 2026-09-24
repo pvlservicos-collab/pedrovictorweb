@@ -76,6 +76,8 @@ export interface ActivityComposerHandle {
   focar: () => void
 }
 
+const EMPRESA = '© 2026 PVL CRM · Pedro Victor · PVL Serviços · Pedro Henrique Guedes Victor · CNPJ 38.309.531/0001-33 · Rua Leopoldo Machado, 2613 – Trem, Macapá/AP – CEP 68.901-130 · pvlservicos@gmail.com'
+
 const ActivityComposer = forwardRef<ActivityComposerHandle, ActivityComposerProps>(function ActivityComposer({
   onSend,
   onSendMedia,
@@ -694,6 +696,17 @@ const ActivityComposer = forwardRef<ActivityComposerHandle, ActivityComposerProp
       {/* Hint */}
       <p className="text-center text-[10px] font-bold uppercase tracking-wider text-[var(--chat-text-tertiary)]">
         Enter para enviar · Shift+Enter para nova linha{replyContext ? ' · Esc para cancelar reply' : ''}
+      </p>
+
+      {/* Dados da empresa, numa linha so. Onde nao couber, quebra em vez de
+          cortar: nenhum dado some, e cada um fica inteiro (o CNPJ nao parte no meio). */}
+      <p
+        className="text-center text-[10px] leading-snug text-[var(--chat-text-tertiary)] [text-wrap:balance]"
+        title={EMPRESA}
+      >
+        {EMPRESA.split(' · ').map((parte, i) => (
+          <span key={i}>{i > 0 && ' · '}<span className="whitespace-nowrap">{parte}</span></span>
+        ))}
       </p>
     </div>
   )

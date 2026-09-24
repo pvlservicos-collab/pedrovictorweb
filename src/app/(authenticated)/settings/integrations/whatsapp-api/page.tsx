@@ -15,7 +15,7 @@ const FAQS = [
     },
     {
         question: "Posso usar modelos de mensagem (HSM)?",
-        answer: "Sim! Porém eles exigem aprovação prévia no Gerenciador do WhatsApp. Após aprovados, você poderá dispará-los via automações no ImobEasy CRM."
+        answer: "Sim! Porém eles exigem aprovação prévia no Gerenciador do WhatsApp. Após aprovados, você poderá dispará-los via automações no PVL CRM."
     }
 ]
 
@@ -45,7 +45,7 @@ function FAQItem({ question, answer }: { question: string, answer: string }) {
 export default function WhatsAppAPIPage() {
     const [showKey, setShowKey] = useState(false)
     const [hasCopied, setHasCopied] = useState(false)
-    const webhookUrl = "https://api.atlaseye.com.br/webhooks/whatsapp/v1/client_8a2b5c..."
+    const webhookUrl = "https://pedrovictorweb.com.br/crm/api/webhooks/facebook"
 
     const handleCopy = () => {
         navigator.clipboard.writeText(webhookUrl)

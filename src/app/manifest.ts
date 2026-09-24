@@ -3,9 +3,9 @@ import { BASE_PATH } from '@/lib/base-path'
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: 'ImobEasy CRM',
-    short_name: 'ImobEasy CRM',
-    description: 'Pipeline, WhatsApp e funil de mensagens da Imob Easy.',
+    name: 'PVL CRM',
+    short_name: 'PVL CRM',
+    description: 'Pipeline, WhatsApp e funil de mensagens da PVL Serviços.',
     start_url: `${BASE_PATH}/`,
     scope: `${BASE_PATH}/`,
     display: 'standalone',

@@ -32,9 +32,9 @@ interface Evento {
 const TIPOS: Record<string, { label: string; icon: typeof ArrowDown; cor: string }> = {
   mensagem_recebida: { label: 'Mensagem recebida', icon: ArrowDown, cor: '#5fd39b' },
   mensagem_enviada: { label: 'Mensagem enviada', icon: ArrowUp, cor: '#7aa2f7' },
-  lead_recebido: { label: 'Lead recebido', icon: UserPlus, cor: '#8b5cf6' },
+  lead_recebido: { label: 'Lead recebido', icon: UserPlus, cor: '#0AAEFF' },
   lead_movido: { label: 'Lead movido', icon: ArrowsLeftRight, cor: '#14b8a6' },
-  funil_iniciado: { label: 'Funil iniciado', icon: Lightning, cor: '#8b5cf6' },
+  funil_iniciado: { label: 'Funil iniciado', icon: Lightning, cor: '#0AAEFF' },
 }
 
 const PERIODOS = [
@@ -105,7 +105,7 @@ export default function LogPage() {
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
-    a.download = `log-titacrm-${new Date().toISOString().slice(0, 10)}.csv`
+    a.download = `log-pvlcrm-${new Date().toISOString().slice(0, 10)}.csv`
     a.click()
     URL.revokeObjectURL(url)
   }

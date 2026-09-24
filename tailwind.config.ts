@@ -1,6 +1,8 @@
 import type { Config } from 'tailwindcss'
 import tailwindcssAnimate from 'tailwindcss-animate'
 
+const AZUL_PVL = { 50: '#EAF8FF', 100: '#D2F0FF', 200: '#A8E3FF', 300: '#6FD2FF', 400: '#33BFFF', 500: '#0AAEFF', 600: '#008FE0', 700: '#0072B5', 800: '#005A8F', 900: '#064A73', 950: '#042F4A' }
+
 const config: Config = {
   darkMode: 'class',
   content: [
@@ -11,6 +13,14 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        // Identidade PVL CRM: tudo que era roxo ou rosa virou azul-claro saturado.
+        // As escalas abaixo substituem as do Tailwind com o mesmo nome, entao toda
+        // classe purple-/violet-/fuchsia-/pink- ja sai azul sem mexer nos componentes.
+        // (blue continua sendo a escala padrao, ver o comentario de accent.)
+        purple: AZUL_PVL,
+        violet: AZUL_PVL,
+        fuchsia: AZUL_PVL,
+        pink: AZUL_PVL,
         // accent era '#3B82F6' e não tinha nenhum uso real no projeto (confirmado via
         // grep) — reaproveitada pra virar o azul da marca nova. NÃO declarar uma chave
         // `blue` aqui: 50+ arquivos usam a escala padrão do Tailwind (bg-blue-600 etc)

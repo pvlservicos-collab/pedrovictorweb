@@ -7,12 +7,12 @@ import { NotificationProvider } from '@/contexts/NotificationContext'
 import { ThemeProvider } from '@/contexts/ThemeContext'
 
 export const metadata: Metadata = {
-  title: 'ImobEasy CRM',
-  description: 'CRM da Imob Easy: pipeline, WhatsApp e funil de mensagens.',
+  title: 'PVL CRM',
+  description: 'CRM da PVL Serviços: pipeline, WhatsApp e funil de mensagens.',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'black-translucent',
-    title: 'ImobEasy CRM',
+    title: 'PVL CRM',
   },
   icons: {
     // src/app/icon.png ja e detectado pelo Next e vira o favicon sozinho; estes

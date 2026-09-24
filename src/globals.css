@@ -41,16 +41,15 @@
   --ink: #f5f5f2;
   --muted: #9a9a94;
   --line: rgba(255, 255, 255, 0.08);
-  /* IDENTIDADE IMOB EASY (Tel, 21/09). O acento era o dourado da TITA
-     (#f2c744); virou o roxo da marca, com o magenta como segundo tom -- os
-     mesmos de imob-easy/assets/css/tokens.css.
-     O roxo do site (#6d28d9) e escuro demais sobre fundo preto, entao aqui
-     usamos o degrau claro dele (#8b5cf6), que e o mesmo tom que o site ja usa
-     nas bordas de cartao. Os cinzas (--void/--panel) NAO mudaram. */
-  --blue: #8b5cf6;
-  --blue-2: #e07bc4;
-  --blue-line: rgba(139, 92, 246, 0.28);
-  --glow-primary: 0 0 40px rgba(139, 92, 246, 0.35);
+  /* IDENTIDADE PVL CRM (23/09/2026). O acento era o roxo com magenta da Imob
+     Easy; virou azul-claro bem saturado, com o ciano do site (#00EFFF) puxado
+     pra um tom que ainda aparece sobre fundo claro como segundo tom. As
+     escalas purple/violet/fuchsia/pink do Tailwind apontam pro mesmo azul
+     (tailwind.config.ts). Os cinzas (--void/--panel) NAO mudaram. */
+  --blue: #1AB8FF;
+  --blue-2: #00E0FF;
+  --blue-line: rgba(26, 184, 255, 0.3);
+  --glow-primary: 0 0 40px rgba(26, 184, 255, 0.35);
 
   /* ── Rampa de cinzas ──────────────────────────────────────────────
      Os tokens de marca acima (--void/--panel/--panel-2) continuam sendo a
@@ -152,7 +151,7 @@ h1, h2 {
   --chat-bubble-out: #4a4a50;
   --chat-bubble-out-ink: #ffffff;
   --chat-bg-field-evolution: #f1eefb;
-  --chat-border-evolution: rgba(139, 92, 246, 0.25);
+  --chat-border-evolution: rgba(26, 184, 255, 0.25);
   --chat-glass-veil: linear-gradient(158deg, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.35) 100%);
   --chat-glass-edge: rgba(0, 0, 0, 0.07);
 }
@@ -174,7 +173,7 @@ h1, h2 {
   --chat-bubble-out: #333338;
   --chat-bubble-out-ink: #f2f2ef;
   --chat-bg-field-evolution: #1b1725;
-  --chat-border-evolution: rgba(139, 92, 246, 0.2);
+  --chat-border-evolution: rgba(26, 184, 255, 0.2);
   --chat-glass-veil: var(--glass-veil);
   --chat-glass-edge: var(--glass-edge);
 }
@@ -461,7 +460,7 @@ html {
   /* Variante de acento — card em destaque, ainda cinza mas com fio amarelo */
   .glass-accent {
     border-color: var(--blue-line);
-    box-shadow: var(--glass-lift), 0 0 0 1px rgba(139, 92, 246, 0.06);
+    box-shadow: var(--glass-lift), 0 0 0 1px rgba(26, 184, 255, 0.06);
   }
 
   /* ── Superfícies sólidas (degradê cinza→cinza, sem transparência) ──
@@ -517,12 +516,12 @@ html {
     background: var(--blue);
     color: #100d02;
     border-color: rgba(255, 255, 255, 0.22);
-    box-shadow: 0 0 0 1px rgba(139, 92, 246, 0.18), 0 6px 18px -10px rgba(139, 92, 246, 0.55);
+    box-shadow: 0 0 0 1px rgba(26, 184, 255, 0.18), 0 6px 18px -10px rgba(26, 184, 255, 0.55);
   }
   .btn-primary:hover:not(:disabled) {
     background: var(--blue-2);
     border-color: rgba(255, 255, 255, 0.34);
-    box-shadow: 0 0 0 1px rgba(139, 92, 246, 0.3), 0 10px 26px -10px rgba(139, 92, 246, 0.7);
+    box-shadow: 0 0 0 1px rgba(26, 184, 255, 0.3), 0 10px 26px -10px rgba(26, 184, 255, 0.7);
   }
 
   /* Secundário — grafite chapado, o botão mais usado do app */
@@ -623,7 +622,7 @@ html {
     outline: none;
     border-color: var(--blue-line);
     background: rgba(0, 0, 0, 0.4);
-    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+    box-shadow: 0 0 0 3px rgba(26, 184, 255, 0.1);
   }
 }
 
@@ -670,7 +669,7 @@ html {
   left: 18%;
   width: 32rem;
   height: 32rem;
-  background: rgba(139, 92, 246, 0.07);
+  background: rgba(26, 184, 255, 0.07);
   filter: blur(120px);
 }
 .ambient-glow::after {
@@ -699,7 +698,7 @@ html {
   }
   25%, 75% {
     border-color: var(--blue);
-    box-shadow: var(--glass-lift), 0 0 0 3px rgba(139, 92, 246, 0.28), 0 0 26px -4px rgba(139, 92, 246, 0.55);
+    box-shadow: var(--glass-lift), 0 0 0 3px rgba(26, 184, 255, 0.28), 0 0 26px -4px rgba(26, 184, 255, 0.55);
   }
 }
 

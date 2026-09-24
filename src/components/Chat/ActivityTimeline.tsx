@@ -424,11 +424,11 @@ const MessageBubble = memo(function MessageBubble({
               não mr-2 de propósito: padding faz parte da área do hover, então o
               mouse vai da bolha pros botões sem passar por um vão que os apaga. */}
           {!isDeleted && (onTogglePin || onReply || (onRequestDelete && canDelete)) && (
-            <div className={`absolute right-full pr-2 top-1/2 -translate-y-1/2 flex items-center gap-1 transition-opacity z-20 ${isSelected ? 'opacity-100' : 'opacity-0 group-hover/msg:opacity-100'}`}>
+            <div className="absolute right-full pr-2 top-1/2 -translate-y-1/2 flex items-center gap-1 z-20">
               {onToggleSelect && canDelete && (
                 <button
                   onClick={() => onToggleSelect(activity)}
-                  className={`w-7 h-7 rounded-full border shadow-sm flex items-center justify-center transition-colors ${
+                  className={`w-7 h-7 rounded-full border shadow-sm flex items-center justify-center transition ${isSelected ? '' : 'opacity-0 group-hover/msg:opacity-100'} ${
                     isSelected
                       ? 'bg-[var(--chat-accent)] border-[var(--chat-accent)]'
                       : 'bg-[var(--chat-bg-menu)] border-[var(--chat-border)] hover:bg-[var(--chat-bg-hover)]'
@@ -438,19 +438,10 @@ const MessageBubble = memo(function MessageBubble({
                   {isSelected && <Check size={14} weight="bold" className="text-white" />}
                 </button>
               )}
-              {onRequestDelete && canDelete && (
-                <button
-                  onClick={() => onRequestDelete(activity)}
-                  className="w-7 h-7 rounded-full bg-[var(--chat-bg-menu)] border border-[var(--chat-border)] shadow-sm flex items-center justify-center hover:bg-red-500/10 hover:border-red-500/30"
-                  title="Apagar mensagem"
-                >
-                  <Trash size={14} weight="bold" className="text-[var(--chat-icon)] hover:text-red-500" />
-                </button>
-              )}
               {onTogglePin && (
                 <button
                   onClick={() => onTogglePin(activity)}
-                  className="glass-raised w-7 h-7 rounded-full flex items-center justify-center hover:brightness-125"
+                  className="glass-raised w-7 h-7 rounded-full flex items-center justify-center hover:brightness-125 opacity-0 group-hover/msg:opacity-100 transition-opacity"
                   title={isPinned ? 'Desafixar mensagem' : 'Fixar mensagem'}
                 >
                   <PushPin size={14} weight={isPinned ? 'fill' : 'bold'} className={isPinned ? 'text-[var(--chat-accent)] -rotate-45' : 'text-[var(--chat-icon)]'} />
@@ -459,10 +450,21 @@ const MessageBubble = memo(function MessageBubble({
               {onReply && (
                 <button
                   onClick={() => onReply(activity)}
-                  className="glass-raised w-7 h-7 rounded-full flex items-center justify-center hover:brightness-125"
+                  className="glass-raised w-7 h-7 rounded-full flex items-center justify-center hover:brightness-125 opacity-0 group-hover/msg:opacity-100 transition-opacity"
                   title="Responder"
                 >
                   <ArrowBendUpLeft size={14} weight="bold" className="text-[var(--chat-icon)]" />
+                </button>
+              )}
+              {/* Lixeira por ultimo: a fileira cresce pra esquerda a partir da
+                  bolha, entao o ultimo item e o que fica colado na mensagem. */}
+              {onRequestDelete && canDelete && (
+                <button
+                  onClick={() => onRequestDelete(activity)}
+                  className="w-7 h-7 rounded-full bg-[var(--chat-bg-menu)] border border-[var(--chat-border)] shadow-sm flex items-center justify-center hover:bg-red-500/10 hover:border-red-500/30"
+                  title="Apagar mensagem"
+                >
+                  <Trash size={14} weight="bold" className="text-[var(--chat-icon)] hover:text-red-500" />
                 </button>
               )}
             </div>
@@ -549,7 +551,7 @@ const MessageBubble = memo(function MessageBubble({
           <div className="flex items-center gap-1.5 mb-1 ml-1">
             <span className="text-xs font-semibold text-[var(--chat-text-muted)]">{senderName}</span>
             {isEvolution && (
-              <span className="text-[9px] font-bold uppercase tracking-wide px-1.5 py-0.5 rounded-full" style={{ backgroundColor: 'rgba(139,92,246,0.2)', color: '#a78bfa' }}>
+              <span className="text-[9px] font-bold uppercase tracking-wide px-1.5 py-0.5 rounded-full" style={{ backgroundColor: 'rgba(26, 184, 255,0.2)', color: '#33BFFF' }}>
                 Nº 2
               </span>
             )}
@@ -559,12 +561,21 @@ const MessageBubble = memo(function MessageBubble({
           {/* Reply/Pin buttons — inbound (appear on right). Presos pela borda da
               bolha (left-full), pelo mesmo motivo do lado de quem envia: crescem
               pra fora da mensagem, nunca por cima dela. */}
-          {(onTogglePin || onReply) && (
-            <div className="absolute left-full pl-2 top-1/2 -translate-y-1/2 flex items-center gap-1 opacity-0 group-hover/msg:opacity-100 transition-opacity z-20">
+          {(onTogglePin || onReply || (onRequestDelete && canDelete)) && (
+            <div className="absolute left-full pl-2 top-1/2 -translate-y-1/2 flex items-center gap-1 z-20">
+              {onRequestDelete && canDelete && !isDeleted && (
+                <button
+                  onClick={() => onRequestDelete(activity)}
+                  className="w-7 h-7 rounded-full bg-[var(--chat-bg-menu)] border border-[var(--chat-border)] shadow-sm flex items-center justify-center hover:bg-red-500/10 hover:border-red-500/30"
+                  title="Apagar mensagem"
+                >
+                  <Trash size={14} weight="bold" className="text-[var(--chat-icon)] hover:text-red-500" />
+                </button>
+              )}
               {onTogglePin && (
                 <button
                   onClick={() => onTogglePin(activity)}
-                  className="glass-raised w-7 h-7 rounded-full flex items-center justify-center hover:brightness-125"
+                  className="glass-raised w-7 h-7 rounded-full flex items-center justify-center hover:brightness-125 opacity-0 group-hover/msg:opacity-100 transition-opacity"
                   title={isPinned ? 'Desafixar mensagem' : 'Fixar mensagem'}
                 >
                   <PushPin size={14} weight={isPinned ? 'fill' : 'bold'} className={isPinned ? 'text-[var(--chat-accent)] -rotate-45' : 'text-[var(--chat-icon)]'} />
@@ -573,7 +584,7 @@ const MessageBubble = memo(function MessageBubble({
               {onReply && (
                 <button
                   onClick={() => onReply(activity)}
-                  className="glass-raised w-7 h-7 rounded-full flex items-center justify-center hover:brightness-125"
+                  className="glass-raised w-7 h-7 rounded-full flex items-center justify-center hover:brightness-125 opacity-0 group-hover/msg:opacity-100 transition-opacity"
                   title="Responder"
                 >
                   <ArrowBendUpLeft size={14} weight="bold" className="text-[var(--chat-icon)]" />
@@ -649,8 +660,10 @@ export default function ActivityTimeline({
   // disparo ligado no mesmo número) não têm actor_member_id — só um admin pode apagá-las;
   // um membro comum só apaga as que ele mesmo mandou pelo CRM.
   const canDeleteActivity = (activity: LeadActivityWithActor) => {
-    if (activity.metadata?.is_optimistic || activity.metadata?.direction !== 'outbound') return false
+    if (activity.metadata?.is_optimistic || activity.type !== 'whatsapp') return false
     if (isOrgAdminUser) return true
+    // Mensagem recebida do cliente: só admin apaga (a regra do servidor é a mesma).
+    if (activity.metadata?.direction !== 'outbound') return false
     return activity.metadata?.source === 'human' && !!currentOrganization?.id && activity.actor_member_id === currentOrganization.id
   }
 
@@ -994,7 +1007,9 @@ export default function ActivityTimeline({
               <p className="text-xs text-[var(--chat-text-muted)] mb-4">
                 {supportsEveryone
                   ? 'Escolha se ela também deve sumir do WhatsApp do cliente ou só daqui do CRM.'
-                  : 'A API Oficial do WhatsApp não permite apagar mensagens já enviadas — ela vai continuar visível no celular do cliente. Só sai daqui do CRM.'}
+                  : deleteTarget.metadata?.direction !== 'outbound'
+                    ? 'A mensagem sai só daqui do CRM — no WhatsApp do cliente ela continua.'
+                    : 'A API Oficial do WhatsApp não permite apagar mensagens já enviadas — ela vai continuar visível no celular do cliente. Só sai daqui do CRM.'}
               </p>
 
               <div className="flex flex-col gap-2">

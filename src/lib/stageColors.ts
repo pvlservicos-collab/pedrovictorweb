@@ -10,9 +10,9 @@ export const STAGE_COLORS: StageColor[] = [
   { bar: '#F97316', bgLight: '#FFF7ED' }, // orange
   { bar: '#EAB308', bgLight: '#FEFCE8' }, // yellow
   { bar: '#3B82F6', bgLight: '#EFF6FF' }, // blue
-  { bar: '#A855F7', bgLight: '#FAF5FF' }, // purple
+  { bar: '#0AAEFF', bgLight: '#FAF5FF' }, // purple
   { bar: '#22C55E', bgLight: '#F0FDF4' }, // green
-  { bar: '#EC4899', bgLight: '#FDF2F8' }, // pink (fallback for 6+)
+  { bar: '#00C8FF', bgLight: '#FDF2F8' }, // pink (fallback for 6+)
   { bar: '#14B8A6', bgLight: '#F0FDFA' }, // teal
   { bar: '#F43F5E', bgLight: '#FFF1F2' }, // rose
 ]

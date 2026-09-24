@@ -141,8 +141,8 @@ export default function Navbar() {
       <div className="flex items-center gap-8">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2">
-          <img src={`${BASE_PATH}/logos/imobeasy-simbolo.svg`} alt="Imob Easy" className="h-7 w-7 object-contain" />
-          <span className="font-display font-bold text-ink hidden sm:inline">ImobEasy CRM</span>
+          <img src={`${BASE_PATH}/logos/pvlcrm-simbolo.svg`} alt="PVL CRM" className="h-7 w-7 object-contain" />
+          <span className="font-display font-bold text-ink hidden sm:inline">PVL CRM</span>
         </Link>
 
         {/* Nav Tabs (desktop) */}
@@ -304,8 +304,8 @@ export default function Navbar() {
         <div className="absolute left-0 top-0 bottom-0 w-72 max-w-[85vw] glass-raised rounded-none border-y-0 border-l-0 flex flex-col">
           <div className="flex items-center justify-between h-14 px-4 relative">
             <Link href="/" className="flex items-center gap-2" onClick={() => setShowMobileMenu(false)}>
-              <img src={`${BASE_PATH}/logos/imobeasy-simbolo.svg`} alt="Imob Easy" className="h-7 w-7 object-contain" />
-              <span className="font-display font-bold text-ink">ImobEasy CRM</span>
+              <img src={`${BASE_PATH}/logos/pvlcrm-simbolo.svg`} alt="PVL CRM" className="h-7 w-7 object-contain" />
+              <span className="font-display font-bold text-ink">PVL CRM</span>
             </Link>
             <button
               onClick={() => setShowMobileMenu(false)}

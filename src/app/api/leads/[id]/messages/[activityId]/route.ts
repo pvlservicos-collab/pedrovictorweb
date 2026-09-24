@@ -30,7 +30,7 @@ export async function DELETE(
     // preserva o comportamento antigo (sempre tenta "para todos" quando o canal suporta).
     // `deleteForEveryone: false` é a escolha explícita de "apagar só pra mim".
     const body = await req.json().catch(() => ({}))
-    const wantsEveryone = body?.deleteForEveryone !== false
+    let wantsEveryone = body?.deleteForEveryone !== false
 
     const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(id)
 
@@ -72,15 +72,18 @@ export async function DELETE(
 
     const metadata = (activity.metadata as Record<string, any>) || {}
 
-    // Mensagens recebidas do cliente nunca são apagáveis por aqui (não é um "envio da
-    // equipe" pra desfazer). Mensagens enviadas por automação externa (source !== 'human',
-    // sem actor_member_id) só um admin apaga — ver isOwner abaixo.
-    if (activity.type !== 'whatsapp' || metadata.direction !== 'outbound') {
-      return apiError(400, 'Só é possível apagar mensagens de WhatsApp enviadas (não é possível apagar mensagens recebidas do cliente).')
+    // Mensagens enviadas por automação externa (source !== 'human', sem
+    // actor_member_id) só um admin apaga — ver isOwner abaixo. Mensagem recebida
+    // do cliente também só admin, e só sai daqui do CRM: nenhum canal deixa a
+    // empresa apagar o que o cliente mandou.
+    if (activity.type !== 'whatsapp') {
+      return apiError(400, 'Só é possível apagar mensagens de WhatsApp.')
     }
     if (metadata.deleted) return apiError(400, 'Essa mensagem já foi apagada.')
 
-    const isOwner = !!auth.memberId && activity.actorMemberId === auth.memberId
+    const recebida = metadata.direction !== 'outbound'
+    if (recebida) wantsEveryone = false
+    const isOwner = !recebida && !!auth.memberId && activity.actorMemberId === auth.memberId
     if (!isOwner && !(await isOrgAdmin(auth))) {
       return apiError(403, 'Você só pode apagar mensagens que você mesmo enviou (ou pedir a um administrador).')
     }

@@ -63,7 +63,7 @@ export default function LoginForm() {
           required
           autoComplete="username"
           className="w-full bg-panel-2 border border-line rounded-lg px-3 py-2 text-sm text-ink placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent"
-          placeholder="tita ou seu@email.com"
+          placeholder="seu@email.com"
         />
       </div>
 

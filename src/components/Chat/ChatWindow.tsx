@@ -2,7 +2,7 @@
 import { BASE_PATH } from '@/lib/base-path'
 
 import { useState, useRef, useEffect } from 'react'
-import { Image as ImageIcon } from '@phosphor-icons/react'
+import { Image as ImageIcon, ChatCenteredText } from '@phosphor-icons/react'
 import { useLeadActivities, useAuth, useChatButtonSettings, useIsMobile } from '@/hooks'
 import { usePinnedMessages } from '@/hooks/usePinnedMessages'
 import { uploadClientFile } from '@/lib/blobClient'
@@ -10,6 +10,7 @@ import { LeadWithOwner, LeadActivityWithActor } from '@/lib/types'
 import ActivityTimeline from './ActivityTimeline'
 import ActivityComposer, { ActivityComposerHandle } from './ActivityComposer'
 import PinnedMessagesBar from './PinnedMessagesBar'
+import TemplatePanel from './TemplatePanel'
 
 import { ChatButtonKey } from '@/hooks/useChatButtonSettings'
 
@@ -33,6 +34,15 @@ export default function ChatWindow({ lead, organizationId, onMessageSent }: Chat
   const { settings: chatButtonSettings, fireWebhook } = useChatButtonSettings()
   const [replyContext, setReplyContext] = useState<ReplyContext | null>(null)
   const [sendError, setSendError] = useState<string | null>(null)
+  const [templateAberto, setTemplateAberto] = useState(false)
+
+  // Mensagem apagada por alguem da equipe (delete_scope so existe quando o
+  // apagar saiu daqui) some da conversa. A apagada pelo proprio cliente no
+  // WhatsApp continua aparecendo como apagada.
+  const mensagensVisiveis = activities.filter((a) => !a.metadata?.delete_scope)
+
+  // Trocou de conversa: o painel de template fecha.
+  useEffect(() => { setTemplateAberto(false) }, [lead.id])
   const ehCelular = useIsMobile()
   const composerRef = useRef<ActivityComposerHandle>(null)
 
@@ -258,6 +268,18 @@ export default function ChatWindow({ lead, organizationId, onMessageSent }: Chat
       {/* Pinned Messages */}
       <PinnedMessagesBar pinned={pinned} onUnpin={handleUnpin} />
 
+      {/* Enviar template (API Oficial): unico jeito de a empresa comecar a
+          conversa fora da janela de 24h. O painel abre acima do campo de digitar. */}
+      <div className="flex justify-end px-3 pt-2">
+        <button
+          onClick={() => setTemplateAberto((v) => !v)}
+          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold border shadow-sm transition ${templateAberto ? 'bg-accent text-[#04121c] border-transparent' : 'bg-[var(--chat-bg-panel)] text-[var(--chat-text-primary)] border-[var(--chat-border)] hover:border-accent'}`}
+        >
+          <ChatCenteredText size={14} weight="bold" />
+          Enviar template
+        </button>
+      </div>
+
       {/* Falha ao carregar as mensagens: avisa e deixa tentar de novo. Antes a
           conversa abria em branco, calada — quem atende não tinha como saber se
           a pessoa nunca escreveu ou se a busca falhou. */}
@@ -275,7 +297,7 @@ export default function ChatWindow({ lead, organizationId, onMessageSent }: Chat
 
       {/* Timeline */}
       <ActivityTimeline
-        activities={activities}
+        activities={mensagensVisiveis}
         loading={loading}
         lead={lead}
         onReply={handleReply}
@@ -295,6 +317,18 @@ export default function ChatWindow({ lead, organizationId, onMessageSent }: Chat
             ✕
           </button>
         </div>
+      )}
+
+      {templateAberto && (
+        <TemplatePanel
+          leadId={lead.id}
+          leadName={lead.title || ''}
+          onClose={() => setTemplateAberto(false)}
+          onSent={async (content) => {
+            if (onMessageSent) onMessageSent(content)
+            await recarregarMensagens(false)
+          }}
+        />
       )}
 
       {/* Composer Bottom */}

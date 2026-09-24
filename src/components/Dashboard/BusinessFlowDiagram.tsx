@@ -46,7 +46,7 @@ const nodeTypes = { flowNode: FlowNode }
 const COLOR_ORGANIC = '#3987e5'
 const COLOR_MAGNET_1 = '#c98500'
 const COLOR_MAGNET_2 = '#d95926'
-const COLOR_CRM = '#8b5cf6'
+const COLOR_CRM = '#0AAEFF'
 const COLOR_WHATSAPP = '#199e70'
 
 const nodes = [
@@ -72,7 +72,7 @@ const nodes = [
     id: 'crm',
     type: 'flowNode',
     position: { x: 340, y: 130 },
-    data: { label: 'ImobEasy CRM', sublabel: 'Organiza, qualifica e distribui', category: 'CRM', color: COLOR_CRM, icon: Database, hasTarget: true, hasSource: true },
+    data: { label: 'PVL CRM', sublabel: 'Organiza, qualifica e distribui', category: 'CRM', color: COLOR_CRM, icon: Database, hasTarget: true, hasSource: true },
   },
   {
     id: 'whatsapp',

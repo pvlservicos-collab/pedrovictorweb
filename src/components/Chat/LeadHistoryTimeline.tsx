@@ -13,7 +13,7 @@ interface LeadHistoryTimelineProps {
 /** Dot color per event type */
 function dotColor(type: HistoryEvent['type']): string {
     switch (type) {
-        case 'conversation': return '#8B5CF6'  // purple
+        case 'conversation': return '#0AAEFF'  // purple
         case 'automation': return '#F59E0B'  // amber
         case 'stage_move': return '#10B981'  // green
         case 'value_change': return '#3B82F6'  // blue

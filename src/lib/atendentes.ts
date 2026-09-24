@@ -26,7 +26,7 @@ export interface Atendente {
 // do roxo e do azul fica com pouco contraste como texto em cima dela.
 const EQUIPE: { prefixo: string; nome: string; cor: string }[] = [
   { prefixo: 'augusto', nome: 'Augusto', cor: '#FACC15' }, // amarelo
-  { prefixo: 'michele', nome: 'Michele', cor: '#C084FC' }, // roxo
+  { prefixo: 'michele', nome: 'Michele', cor: '#6FD2FF' }, // roxo
   { prefixo: 'cau', nome: 'Cau', cor: '#60A5FA' },         // azul
 ]
 

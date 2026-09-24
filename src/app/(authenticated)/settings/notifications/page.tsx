@@ -55,7 +55,7 @@ const ALERT_COLORS = [
     { name: 'Laranja', value: '#F97316' },
     { name: 'Azul', value: '#3B82F6' },
     { name: 'Verde', value: '#22C55E' },
-    { name: 'Roxo', value: '#A855F7' },
+    { name: 'Roxo', value: '#0AAEFF' },
 ]
 
 function generateEventId(): string {
@@ -281,7 +281,7 @@ function PushNotificationsCard() {
                     <p className="text-sm text-muted">Seu navegador não é compatível com notificações push.</p>
                 ) : status === 'denied' ? (
                     <p className="text-sm text-muted">
-                        As notificações estão bloqueadas pro ImobEasy CRM neste navegador. Ative de novo nas
+                        As notificações estão bloqueadas pro PVL CRM neste navegador. Ative de novo nas
                         configurações de site do seu navegador/celular pra poder ligar aqui.
                     </p>
                 ) : (
