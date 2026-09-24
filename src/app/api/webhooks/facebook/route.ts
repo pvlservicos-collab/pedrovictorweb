@@ -449,10 +449,22 @@ async function processarMensagemWhatsapp(body: any, entry: any, value: any, mess
     content = '[Mensagem recebida]'
   }
 
+  // O lead fica ligado a esta integração: é por ela que a resposta do chat sai.
+  // Sem isso o lead ficava sem canal, e lead sem canal responde pela Z-API
+  // (ver api/leads/[id]/messages) -- a conversa chegava pela API Oficial e a
+  // resposta saía por outro número, ou falhava.
+  const [cloud] = await db.select({ id: integrations.id }).from(integrations)
+    .where(and(eq(integrations.organizationId, orgId), eq(integrations.type, 'whatsapp_cloud_official'), isNull(integrations.deletedAt)))
+    .limit(1)
+
   // Buscar ou criar lead
-  const [existing] = await db.select({ id: leads.id }).from(leads)
+  const [existing] = await db.select({ id: leads.id, integrationId: leads.integrationId }).from(leads)
     .where(and(eq(leads.organizationId, orgId), ilike(leads.phone, `%${phone}%`), isNull(leads.deletedAt)))
     .limit(1)
+
+  if (existing && !existing.integrationId && cloud) {
+    await db.update(leads).set({ integrationId: cloud.id }).where(eq(leads.id, existing.id))
+  }
 
   let leadId = existing?.id
   if (!leadId) {
@@ -466,6 +478,7 @@ async function processarMensagemWhatsapp(body: any, entry: any, value: any, mess
         title: senderName,
         phone,
         stageId: firstStage?.id || null,
+        integrationId: cloud?.id ?? null,
         lastActivityAt: new Date(),
       }).returning({ id: leads.id })
       leadId = newLead.id
