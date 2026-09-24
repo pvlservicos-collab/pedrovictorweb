@@ -13,7 +13,7 @@
 import { db } from '@/lib/db'
 import { integrations } from '@/lib/schema'
 import { and, eq, isNull } from 'drizzle-orm'
-import { getWhatsAppCredentials } from '@/lib/whatsapp'
+import { getWhatsAppCredentials, numeroParaEnvio } from '@/lib/whatsapp'
 
 export interface TemplateResumo {
   name: string
@@ -132,7 +132,7 @@ export async function enviarTemplate(
     headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({
       messaging_product: 'whatsapp',
-      to: para.replace(/\D/g, ''),
+      to: numeroParaEnvio(para),
       type: 'template',
       template: { name: t.name, language: { code: t.language }, ...(components.length ? { components } : {}) },
     }),
