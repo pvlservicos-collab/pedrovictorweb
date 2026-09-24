@@ -19,7 +19,7 @@
  */
 import { NextRequest, NextResponse } from 'next/server'
 import { signIn } from '@/lib/auth'
-import { comBase } from '@/lib/base-path'
+import { BASE_PATH, comBase } from '@/lib/base-path'
 
 export async function GET(req: NextRequest) {
   // Interruptor: LOGIN_AUTOMATICO=nao volta a tela de login (cada pessoa com o
@@ -48,7 +48,11 @@ export async function GET(req: NextRequest) {
   // x-crm-destino vem do middleware (rewrite); callbackUrl, do AuthGuard.
   const pedido = req.nextUrl.searchParams.get('callbackUrl') || req.headers.get('x-crm-destino') || '/'
   // Chega com o /crm (AuthGuard, middleware) ou sem; sai sempre com ele.
-  const destino = comBase(pedido.startsWith('/') && !pedido.startsWith('//') ? pedido : '/')
+  const pedidoInterno = pedido.startsWith('/') && !pedido.startsWith('//') ? pedido : '/'
+  // Quem entra pela porta principal (/crm, sem página específica) cai no chat:
+  // é onde o atendimento começa. Link direto pra outra página continua indo pra ela.
+  const naRaiz = ['/', BASE_PATH, `${BASE_PATH}/`].includes(pedidoInterno.split('?')[0])
+  const destino = comBase(naRaiz ? '/chat' : pedidoInterno)
 
   try {
     // signIn com redirectTo lanca NEXT_REDIRECT, que o Next trata sozinho.
