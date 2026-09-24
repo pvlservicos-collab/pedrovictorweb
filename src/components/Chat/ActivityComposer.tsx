@@ -9,7 +9,6 @@ import {
   Paperclip,
   Microphone,
   Lightning,
-  Pause,
   ChatCenteredText,
   X,
   ArrowBendUpLeft,
@@ -437,17 +436,6 @@ const ActivityComposer = forwardRef<ActivityComposerHandle, ActivityComposerProp
     <div className="px-6 pb-4 pt-3 space-y-3 relative z-10 bg-gradient-to-t from-[var(--chat-bg-conversation)] via-[var(--chat-bg-conversation)]/80 to-transparent">
       {/* Action Buttons */}
       <div className="flex gap-2 items-center mb-1 flex-wrap">
-        {chatButtonSettings?.pausar_ia?.enabled && (!chatButtonSettings.pausar_ia.position || chatButtonSettings.pausar_ia.position === 'chat') && (
-          <button
-            onClick={() => handleChatButtonClick('pausar_ia')}
-            disabled={webhookStatus?.key === 'pausar_ia' && webhookStatus.status === 'sending'}
-            className={`flex items-center gap-1.5 px-4 py-1.5 border rounded-full text-[11px] font-bold transition-colors ${getButtonStateClass('pausar_ia', 'text-purple-700 dark:text-purple-300 border-purple-500/30 bg-purple-500/10 hover:bg-purple-500/20')}`}
-          >
-            <Pause size={14} weight="bold" />
-            Pausar IA
-            {getButtonStatusIcon('pausar_ia')}
-          </button>
-        )}
         {/* Enviar template no lugar do antigo Sugerir proximos passos. */}
         {onToggleTemplate && (
           <button
