@@ -2,7 +2,7 @@
 import { BASE_PATH } from '@/lib/base-path'
 
 import { useState, useRef, useEffect } from 'react'
-import { Image as ImageIcon, ChatCenteredText } from '@phosphor-icons/react'
+import { Image as ImageIcon } from '@phosphor-icons/react'
 import { useLeadActivities, useAuth, useChatButtonSettings, useIsMobile } from '@/hooks'
 import { usePinnedMessages } from '@/hooks/usePinnedMessages'
 import { uploadClientFile } from '@/lib/blobClient'
@@ -268,18 +268,6 @@ export default function ChatWindow({ lead, organizationId, onMessageSent }: Chat
       {/* Pinned Messages */}
       <PinnedMessagesBar pinned={pinned} onUnpin={handleUnpin} />
 
-      {/* Enviar template (API Oficial): unico jeito de a empresa comecar a
-          conversa fora da janela de 24h. O painel abre acima do campo de digitar. */}
-      <div className="flex justify-end px-3 pt-2">
-        <button
-          onClick={() => setTemplateAberto((v) => !v)}
-          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold border shadow-sm transition ${templateAberto ? 'bg-accent text-[#04121c] border-transparent' : 'bg-[var(--chat-bg-panel)] text-[var(--chat-text-primary)] border-[var(--chat-border)] hover:border-accent'}`}
-        >
-          <ChatCenteredText size={14} weight="bold" />
-          Enviar template
-        </button>
-      </div>
-
       {/* Falha ao carregar as mensagens: avisa e deixa tentar de novo. Antes a
           conversa abria em branco, calada — quem atende não tinha como saber se
           a pessoa nunca escreveu ou se a busca falhou. */}
@@ -334,6 +322,8 @@ export default function ChatWindow({ lead, organizationId, onMessageSent }: Chat
       {/* Composer Bottom */}
       <ActivityComposer
         ref={composerRef}
+        onToggleTemplate={() => setTemplateAberto((v) => !v)}
+        templateAberto={templateAberto}
         onSend={handleSendActivity}
         onSendMedia={handleSendMedia}
         onSendQuickReplyMedia={handleSendQuickReplyMedia}

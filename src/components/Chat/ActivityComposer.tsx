@@ -10,7 +10,7 @@ import {
   Microphone,
   Lightning,
   Pause,
-  Sparkle,
+  ChatCenteredText,
   X,
   ArrowBendUpLeft,
   Flag,
@@ -47,6 +47,9 @@ interface QuickReplyStepPayload {
 }
 
 interface ActivityComposerProps {
+  /** Abre/fecha o painel "Enviar template" (API Oficial), ver TemplatePanel. */
+  onToggleTemplate?: () => void
+  templateAberto?: boolean
   onSend: (content: string) => Promise<void>
   onSendMedia?: (file: File, caption?: string) => Promise<void>
   onSendQuickReplyMedia?: (payload: QuickReplyMediaPayload) => Promise<void>
@@ -87,6 +90,8 @@ const ActivityComposer = forwardRef<ActivityComposerHandle, ActivityComposerProp
   onCancelReply,
   chatButtonSettings,
   fireWebhook,
+  onToggleTemplate,
+  templateAberto,
   organizationId,
   lead,
 }, ref) {
@@ -443,15 +448,14 @@ const ActivityComposer = forwardRef<ActivityComposerHandle, ActivityComposerProp
             {getButtonStatusIcon('pausar_ia')}
           </button>
         )}
-        {chatButtonSettings?.sugerir_passos?.enabled && (!chatButtonSettings.sugerir_passos.position || chatButtonSettings.sugerir_passos.position === 'chat') && (
+        {/* Enviar template no lugar do antigo Sugerir proximos passos. */}
+        {onToggleTemplate && (
           <button
-            onClick={() => handleChatButtonClick('sugerir_passos')}
-            disabled={webhookStatus?.key === 'sugerir_passos' && webhookStatus.status === 'sending'}
-            className={`flex items-center gap-1.5 px-4 py-1.5 border rounded-full text-[11px] font-bold transition-colors ${getButtonStateClass('sugerir_passos', 'border-[var(--chat-border)] text-[var(--chat-icon)] bg-[var(--chat-bg-field)] hover:bg-[var(--chat-bg-hover)]')}`}
+            onClick={onToggleTemplate}
+            className={`flex items-center gap-1.5 px-4 py-1.5 border rounded-full text-[11px] font-bold transition-colors ${templateAberto ? 'bg-accent text-[#04121c] border-transparent' : 'border-[var(--chat-border)] text-[var(--chat-icon)] bg-[var(--chat-bg-field)] hover:bg-[var(--chat-bg-hover)]'}`}
           >
-            <Sparkle size={14} weight="bold" />
-            Sugerir próximos passos
-            {getButtonStatusIcon('sugerir_passos')}
+            <ChatCenteredText size={14} weight="bold" />
+            Enviar template
           </button>
         )}
         {chatButtonSettings?.sinalizar_ajuste?.enabled && (!chatButtonSettings.sinalizar_ajuste.position || chatButtonSettings.sinalizar_ajuste.position === 'chat') && (
