@@ -50,7 +50,9 @@ export function renderizar(t: TemplateResumo, bodyValores: string[], headerValor
 }
 
 function resumir(t: any): TemplateResumo | null {
-  if (t.status !== 'APPROVED') return null
+  // QUALITY_PENDING tambem envia (mesmo criterio do app modelo da Meta): e um
+  // template aprovado que a Meta ainda esta avaliando a qualidade.
+  if (t.status !== 'APPROVED' && t.status !== 'QUALITY_PENDING') return null
   const comps: any[] = t.components || []
   if (comps.some((c) => c.type === 'CAROUSEL')) return null
 

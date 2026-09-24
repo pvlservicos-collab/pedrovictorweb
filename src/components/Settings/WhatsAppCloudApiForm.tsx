@@ -58,7 +58,7 @@ export default function WhatsAppCloudApiForm({ onConnected, compact = false }: W
     const [wabaId, setWabaId] = useState('')
     const [phoneNumberId, setPhoneNumberId] = useState('')
     const [systemToken, setSystemToken] = useState('')
-    const [graphApiVersion, setGraphApiVersion] = useState('v21.0')
+    const [graphApiVersion, setGraphApiVersion] = useState('v25.0')
 
     const [showToken, setShowToken] = useState(false)
     const [connectionState, setConnectionState] = useState<ConnectionState>('loading')
@@ -91,7 +91,7 @@ export default function WhatsAppCloudApiForm({ onConnected, compact = false }: W
                 if (data && data.config) {
                     setWabaId(data.config.waba_id ?? '')
                     setPhoneNumberId(data.config.phone_number_id ?? '')
-                    setGraphApiVersion(data.config.graph_api_version ?? 'v21.0')
+                    setGraphApiVersion(data.config.graph_api_version ?? 'v25.0')
                     setConnectionState(data.status === 'active' ? 'connected' : 'disconnected')
                 } else {
                     setConnectionState('disconnected')
@@ -123,7 +123,7 @@ export default function WhatsAppCloudApiForm({ onConnected, compact = false }: W
                     waba_id: wabaId.trim(),
                     phone_number_id: phoneNumberId.trim(),
                     system_token: systemToken,
-                    graph_api_version: graphApiVersion.trim() || 'v21.0',
+                    graph_api_version: graphApiVersion.trim() || 'v25.0',
                 }),
             })
 

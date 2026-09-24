@@ -1,3 +1,4 @@
+import { GRAPH_VERSION } from '@/lib/meta'
 import { db } from '@/lib/db'
 import { integrations, integrationSecrets } from '@/lib/schema'
 import { eq, and, isNull } from 'drizzle-orm'
@@ -34,7 +35,7 @@ async function getInstagramCredentials(organizationId: string, integrationId: st
   }
 
   return {
-    apiVersion: config.graph_api_version || 'v21.0',
+    apiVersion: config.graph_api_version || GRAPH_VERSION,
     igUserId: config.instagram_business_account_id,
     token: secret.system_token,
   }

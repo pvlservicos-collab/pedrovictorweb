@@ -23,6 +23,7 @@ import {
   X,
   House,
   ShieldCheck,
+  PlugsConnected,
 } from '@phosphor-icons/react'
 import { useAuth, usePipeline } from '@/hooks'
 import { useTheme } from '@/contexts/ThemeContext'
@@ -36,6 +37,7 @@ const NAV_ITEMS = [
   { label: 'Início', href: '/', icon: House },
   { label: 'Pipeline', href: '/pipeline', icon: Kanban },
   { label: 'WhatsApp API', href: '/chat', icon: WhatsappLogo },
+  { label: 'Integração', href: '/integracao', icon: PlugsConnected },
   { label: 'Funil de Mensagens', href: '/funnels', icon: FlowArrow },
   { label: 'Configurações', href: '/settings/organization', icon: Gear },
 ]
@@ -138,11 +140,11 @@ export default function Navbar() {
     <>
     <nav className="app-safe-top glass-soft rounded-none border-x-0 border-t-0 px-4 sm:px-6 h-14 flex items-center justify-between sticky top-0 z-50">
       {/* Left: Logo + Nav */}
-      <div className="flex items-center gap-8">
+      <div className="flex items-center gap-4 xl:gap-8">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2">
           <img src={`${BASE_PATH}/logos/pvlcrm-simbolo.svg`} alt="PVL CRM" className="h-7 w-7 object-contain" />
-          <span className="font-display font-bold text-ink hidden sm:inline">PVL CRM</span>
+          <span className="font-display font-bold text-ink hidden sm:inline whitespace-nowrap">PVL CRM</span>
         </Link>
 
         {/* Nav Tabs (desktop) */}
@@ -163,7 +165,7 @@ export default function Navbar() {
                 >
                   <Link
                     href={item.href}
-                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors border ${isActive
+                    className={`flex items-center gap-1.5 px-2.5 xl:px-3 py-1.5 rounded-lg whitespace-nowrap text-sm font-medium transition-colors border ${isActive
                       ? 'bg-graphite-6 border-white/15 text-accent-2'
                       : 'border-transparent text-muted hover:bg-white/[0.06] hover:text-ink'
                       }`}
@@ -204,7 +206,7 @@ export default function Navbar() {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors border ${isActive
+                className={`flex items-center gap-1.5 px-2.5 xl:px-3 py-1.5 rounded-lg whitespace-nowrap text-sm font-medium transition-colors border ${isActive
                   ? 'bg-graphite-6 border-white/15 text-accent-2'
                   : 'border-transparent text-muted hover:bg-white/[0.06] hover:text-ink'
                   }`}
@@ -257,7 +259,7 @@ export default function Navbar() {
                 <span className="text-purple-300 text-xs font-bold">{initials}</span>
               </div>
             )}
-            <span className="hidden sm:inline text-sm font-medium text-ink truncate max-w-[120px]">{displayName}</span>
+            <span className="hidden 2xl:inline text-sm font-medium text-ink truncate max-w-[120px]">{displayName}</span>
             <CaretDown size={14} className={`hidden sm:block text-muted transition-transform ${showUserDropdown ? 'rotate-180' : ''}`} />
           </div>
 

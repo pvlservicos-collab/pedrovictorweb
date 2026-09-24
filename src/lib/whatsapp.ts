@@ -1,3 +1,4 @@
+import { GRAPH_VERSION } from '@/lib/meta'
 import { db } from '@/lib/db'
 import { integrations, integrationSecrets } from '@/lib/schema'
 import { eq, and, isNull } from 'drizzle-orm'
@@ -28,7 +29,7 @@ export async function getWhatsAppCredentials(organizationId: string) {
   }
 
   return {
-    apiVersion: config.graph_api_version || 'v21.0',
+    apiVersion: config.graph_api_version || GRAPH_VERSION,
     phoneNumberId: config.phone_number_id,
     token: secret.system_token,
   }

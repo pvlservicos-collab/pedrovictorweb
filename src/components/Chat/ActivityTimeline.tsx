@@ -649,7 +649,7 @@ export default function ActivityTimeline({
   const [bulkDeleting, setBulkDeleting] = useState(false)
   const endRef = useRef<HTMLDivElement>(null)
   const { currentOrganization, isMaster, roleName } = useAuth()
-  const isOrgAdminUser = isMaster || roleName?.toLowerCase() === 'administrador' || roleName?.toLowerCase() === 'owner'
+  const isOrgAdminUser = isMaster || ['administrador', 'admin', 'owner', 'master'].includes(roleName?.toLowerCase() || '')
 
   // Só quem enviou a mensagem (ou um admin) pode apagá-la — mesma regra aplicada no
   // servidor em /api/leads/[id]/messages/[activityId]; aqui só decide se o botão aparece.

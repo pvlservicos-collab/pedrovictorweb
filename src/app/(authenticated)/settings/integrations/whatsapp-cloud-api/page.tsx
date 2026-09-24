@@ -8,7 +8,7 @@ import WhatsAppCloudApiForm from '@/components/Settings/WhatsAppCloudApiForm'
 const FAQS = [
     {
         question: "Como obter minhas credenciais?",
-        answer: "Crie um App no portal Meta for Developers, adicione o produto WhatsApp, configure um número oficial (com verificação de empresa) e gere um System User Token Permanente no Business Manager."
+        answer: "Use o botão Conectar WhatsApp: você entra com o Facebook, escolhe a empresa e o número, e o CRM recebe o acesso sozinho (Embedded Signup). O cadastro manual, com WABA ID, Phone Number ID e token, fica como alternativa avançada."
     },
     {
         question: "O que é o WABA ID?",
@@ -66,6 +66,13 @@ export default function WhatsAppCloudAPIPage() {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 {/* Form Credentials */}
                 <div className="lg:col-span-2">
+                    {/* Conectar pela Meta, numeros, modelos e eventos moram na aba Integracao. */}
+                    <Link href="/integracao" className="block bg-panel border border-accent/40 rounded-xl p-6 mb-8 hover:bg-panel-2 transition-colors">
+                        <p className="text-lg font-bold text-ink">Conectar WhatsApp Business →</p>
+                        <p className="text-sm text-muted mt-1">Conexão oficial pela Meta, números da conta, modelos de mensagem e eventos ficam na aba <b className="text-ink">Integração</b>, no menu.</p>
+                    </Link>
+
+                    <h2 className="text-sm font-bold uppercase tracking-wider text-muted mb-3">Cadastro manual (avançado)</h2>
                     <WhatsAppCloudApiForm />
 
                     {/* FAQs */}

@@ -22,6 +22,16 @@ import { signIn } from '@/lib/auth'
 import { comBase } from '@/lib/base-path'
 
 export async function GET(req: NextRequest) {
+  // Interruptor: LOGIN_AUTOMATICO=nao volta a tela de login (cada pessoa com o
+  // seu usuário — o caminho quando houver mais de um cliente ou atendente, e o
+  // que se entrega ao revisor da Meta). Sem a variável, segue a entrada automática.
+  if (process.env.LOGIN_AUTOMATICO === 'nao') {
+    const login = req.nextUrl.clone()
+    login.pathname = '/login'
+    login.search = ''
+    return NextResponse.redirect(login)
+  }
+
   const email = process.env.LOGIN_AUTOMATICO_EMAIL
   const senha = process.env.LOGIN_AUTOMATICO_SENHA
 

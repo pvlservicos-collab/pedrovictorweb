@@ -42,6 +42,7 @@ export default function TemplatePanel({ leadId, leadName, onClose, onSent }: Tem
   const [valoresCabecalho, setValoresCabecalho] = useState<string[]>([])
   const [enviando, setEnviando] = useState(false)
   const [erroEnvio, setErroEnvio] = useState<string | null>(null)
+  const [semPagamento, setSemPagamento] = useState(false)
 
   useEffect(() => {
     let vivo = true
@@ -52,6 +53,7 @@ export default function TemplatePanel({ leadId, leadName, onClose, onSent }: Tem
         if (!res.ok) throw new Error(j.error || 'Não consegui carregar os templates.')
         const lista: TemplateResumo[] = j.templates || []
         setTemplates(lista)
+        setSemPagamento(j.pagamento === false)
         if (lista[0]) setEscolhido(`${lista[0].name}|${lista[0].language}`)
       })
       .catch((e) => vivo && setErroLista(e.message))
@@ -114,6 +116,9 @@ export default function TemplatePanel({ leadId, leadName, onClose, onSent }: Tem
         )}
         {!templates && !erroLista && (
           <p className="flex items-center gap-2 text-sm text-[var(--chat-text-muted)]"><CircleNotch size={16} className="animate-spin" />Carregando templates da Meta…</p>
+        )}
+        {semPagamento && (
+          <p className="flex items-start gap-2 text-xs text-amber-500"><WarningCircle size={16} className="flex-shrink-0 mt-0.5" />A conta do WhatsApp está sem forma de pagamento. Templates de marketing e utilidade podem ser recusados — cadastre um cartão no Gerenciador do WhatsApp.</p>
         )}
         {templates && templates.length === 0 && (
           <p className="text-sm text-[var(--chat-text-muted)]">Nenhum template aprovado que dê para enviar pelo chat.</p>

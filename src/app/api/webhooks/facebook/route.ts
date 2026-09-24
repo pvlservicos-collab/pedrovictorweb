@@ -7,12 +7,13 @@
  *        meta_webhook_events, 200 na hora, processamento no after())
  *
  * Configure no Facebook Developers:
- *   URL: https://pedrovictorweb.com.br/crm/api/webhooks/facebook?org_id=SEU_ORG_ID
+ *   URL: https://pedrovictorweb.com.br/crm/api/webhooks/facebook (uma so pra todos os clientes)
  *   Verify Token: valor de FACEBOOK_WEBHOOK_VERIFY_TOKEN
  *
  * Variáveis: FACEBOOK_WEBHOOK_VERIFY_TOKEN, FACEBOOK_APP_SECRET (e
  * INSTAGRAM_APP_SECRET, se o Instagram for outro app), META_WEBHOOK_ATIVO=sim.
  */
+import { GRAPH_VERSION } from '@/lib/meta'
 import { NextRequest, after } from 'next/server'
 import { createHmac, timingSafeEqual } from 'node:crypto'
 import { db } from '@/lib/db'
@@ -58,7 +59,7 @@ async function downloadWhatsappMedia(orgId: string, mediaId: string): Promise<{ 
   const secret = secretRow?.secret as { system_token?: string } | undefined
   if (!secret?.system_token) return null
 
-  const apiVersion = config?.graph_api_version || 'v21.0'
+  const apiVersion = config?.graph_api_version || GRAPH_VERSION
   const token = secret.system_token
 
   const metaRes = await fetch(`https://graph.facebook.com/${apiVersion}/${mediaId}`, {
@@ -380,21 +381,30 @@ async function processarEvento(eventoId: string, body: any, orgIdDaUrl: string |
   }).where(eq(metaWebhookEvents.id, eventoId)).catch((e) => console.error('[Facebook Webhook] anotar evento', e))
 }
 
-async function processarMensagemWhatsapp(body: any, entry: any, value: any, message: any, orgIdDaUrl: string | null): Promise<string> {
-  // Resolve org_id: URL param (legado) ou via WABA ID no payload
-  let orgId = orgIdDaUrl
-  if (!orgId) {
-    const wabaId = entry?.id as string | undefined
-    if (wabaId) {
-      const { integrations } = await import('@/lib/schema')
-      const { sql } = await import('drizzle-orm')
-      const [found] = await db.select({ organizationId: integrations.organizationId })
-        .from(integrations)
-        .where(sql`${integrations.config}->>'waba_id' = ${wabaId}`)
-        .limit(1)
-      orgId = found?.organizationId ?? null
-    }
+/** Organizacao dona do numero/WABA do evento, pela integracao da API Oficial. */
+async function organizacaoDoEvento(phoneNumberId?: string, wabaId?: string): Promise<string | null> {
+  for (const [campo, valor] of [['phone_number_id', phoneNumberId], ['waba_id', wabaId]] as const) {
+    if (!valor) continue
+    const [achou] = await db.select({ organizationId: integrations.organizationId })
+      .from(integrations)
+      .where(and(
+        eq(integrations.type, 'whatsapp_cloud_official'),
+        isNull(integrations.deletedAt),
+        sql`${integrations.config}->>${campo} = ${String(valor)}`,
+      ))
+      .limit(1)
+    if (achou) return achou.organizationId
   }
+  return null
+}
+
+async function processarMensagemWhatsapp(body: any, entry: any, value: any, message: any, orgIdDaUrl: string | null): Promise<string> {
+  // De qual cliente e a mensagem? A Meta tem UMA URL de webhook por app, pra
+  // todos os clientes do Tech Provider, entao quem decide e o payload: primeiro
+  // o numero (phone_number_id), depois a WABA (entry.id). O ?org_id da URL e
+  // legado e so vale se nenhum dos dois bater -- se viesse primeiro, a mensagem
+  // de um cliente cairia na organizacao que estivesse na URL.
+  const orgId = await organizacaoDoEvento(value?.metadata?.phone_number_id, entry?.id) ?? orgIdDaUrl
 
   if (!orgId) return 'ignorado: organizacao nao encontrada'
 

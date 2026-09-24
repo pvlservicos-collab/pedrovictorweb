@@ -81,7 +81,7 @@ export default function OrgDetailModal({ organizationId, onClose, onUpdated }: {
 
   const [wabaId, setWabaId] = useState('')
   const [phoneNumberId, setPhoneNumberId] = useState('')
-  const [graphApiVersion, setGraphApiVersion] = useState('v21.0')
+  const [graphApiVersion, setGraphApiVersion] = useState('v25.0')
   const [systemToken, setSystemToken] = useState('')
   const [showToken, setShowToken] = useState(false)
   const [subscriptionStatus, setSubscriptionStatus] = useState('active')
@@ -127,7 +127,7 @@ export default function OrgDetailModal({ organizationId, onClose, onUpdated }: {
         subscription_status: subscriptionStatus,
         waba_id: wabaId.trim(),
         phone_number_id: phoneNumberId.trim(),
-        graph_api_version: graphApiVersion.trim() || 'v21.0',
+        graph_api_version: graphApiVersion.trim() || 'v25.0',
       }
       if (systemToken) body.system_token = systemToken
       const res = await fetch(`${BASE_PATH}/api/admin/organizations/${organizationId}`, {
@@ -236,7 +236,7 @@ export default function OrgDetailModal({ organizationId, onClose, onUpdated }: {
               </div>
               <div>
                 <label className="block text-xs font-medium text-muted mb-1.5">Graph API Version</label>
-                <CopyableInput value={graphApiVersion} onChange={setGraphApiVersion} placeholder="v21.0" />
+                <CopyableInput value={graphApiVersion} onChange={setGraphApiVersion} placeholder="v25.0" />
               </div>
               <div>
                 <label className="block text-xs font-medium text-muted mb-1.5">System User Token</label>

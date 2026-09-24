@@ -177,7 +177,7 @@ export default function GlobalSearch() {
         onChange={(e) => handleChange(e.target.value)}
         onFocus={() => results.length > 0 && setOpen(true)}
         placeholder="Buscar leads..."
-        className="w-56 pl-9 pr-8 py-1.5 bg-gray-100 border-none rounded-lg text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all"
+        className="w-36 2xl:w-56 pl-9 pr-8 py-1.5 bg-gray-100 border-none rounded-lg text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all"
       />
       {open && (
         <div className="absolute right-0 top-full mt-2 w-80 bg-white border border-gray-100 rounded-xl shadow-xl shadow-gray-200/60 z-50 max-h-[400px] overflow-y-auto animate-in fade-in slide-in-from-top-2">
