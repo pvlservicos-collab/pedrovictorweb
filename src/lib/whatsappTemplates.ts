@@ -36,12 +36,16 @@ export function preencher(texto: string, valores: string[]): string {
   return texto.replace(/\{\{\s*(\d+)\s*\}\}/g, (marca, n) => valores[Number(n) - 1] ?? marca)
 }
 
-/** Texto que o cliente vê, montado igual ao WhatsApp: cabeçalho, corpo, rodapé. */
+/**
+ * Texto que o cliente vê, na ordem do WhatsApp: cabeçalho, corpo, rodapé.
+ * Sem as marcas *negrito* / _itálico_: a conversa do CRM mostra texto puro, e
+ * elas apareceriam como asteriscos soltos.
+ */
 export function renderizar(t: TemplateResumo, bodyValores: string[], headerValores: string[] = []): string {
   return [
-    t.header ? `*${preencher(t.header, headerValores)}*` : null,
+    t.header ? preencher(t.header, headerValores) : null,
     preencher(t.body, bodyValores),
-    t.footer ? `_${t.footer}_` : null,
+    t.footer || null,
   ].filter(Boolean).join('\n\n')
 }
 
