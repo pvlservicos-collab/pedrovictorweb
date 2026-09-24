@@ -43,6 +43,19 @@ function ler(p: any): Linha {
     const erro = s.errors?.[0]?.title
     return { tipo: `message.${s.status}`, numero: s.recipient_id || null, texto: erro ? `Erro: ${erro}` : null, waba }
   }
+  // Coexistência (número também no aplicativo WhatsApp Business).
+  if (change?.field === 'smb_message_echoes') {
+    const m = v.message_echoes?.[0]
+    return { tipo: 'message.echo', numero: m?.to || null, texto: `Enviada pelo celular: ${m?.text?.body || `[${m?.type || 'mensagem'}]`}`, waba }
+  }
+  if (change?.field === 'history') {
+    const conversas = (v.history || []).reduce((n: number, h: any) => n + (h.threads?.length || 0), 0)
+    const fase = v.history?.[0]?.metadata
+    return { tipo: 'history.sync', numero: null, texto: `Histórico do aplicativo: ${conversas} conversa(s)${fase?.progress != null ? ` · ${fase.progress}%` : ''}`, waba }
+  }
+  if (change?.field === 'smb_app_state_sync') {
+    return { tipo: 'contacts.sync', numero: null, texto: `Contatos do aplicativo: ${(v.state_sync || []).length}`, waba }
+  }
   if (change?.field === 'message_template_status_update') {
     return { tipo: 'template.status', numero: null, texto: `${v.message_template_name || 'modelo'} → ${v.event || '?'}${v.reason && v.reason !== 'NONE' ? ` (${v.reason})` : ''}`, waba }
   }

@@ -15,6 +15,8 @@ export interface ConfigCloud {
   graph_api_version?: string
   /** 'embedded_signup' quando veio do botão Conectar WhatsApp; 'manual' do formulário. */
   origem?: 'embedded_signup' | 'manual'
+  /** Número que continua no aplicativo WhatsApp Business (ver lib/coexistencia). */
+  coexistencia?: boolean
 }
 
 export async function salvarIntegracaoCloud(organizationId: string, config: ConfigCloud, token: string): Promise<string> {

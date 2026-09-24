@@ -18,6 +18,7 @@ export async function GET(req: NextRequest) {
     return Response.json({
       waba_id: wabaId,
       phone_number_id_ativo: config.phone_number_id,
+      coexistencia: !!config.coexistencia,
       pagamento,
       numeros,
     })

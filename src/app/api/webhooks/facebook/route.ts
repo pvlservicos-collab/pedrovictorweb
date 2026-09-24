@@ -24,6 +24,7 @@ import { dispatchOutboundWebhook } from '@/lib/outbound-webhook'
 import { ORGANIZATION_ID } from '@/lib/automated-message'
 import { isUniqueViolation } from '@/lib/db-helpers'
 import { notifyInboundMessage } from '@/lib/push'
+import { CAMPOS_COEXISTENCIA, processarCampoCoexistencia } from '@/lib/coexistencia'
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url)
@@ -356,6 +357,23 @@ async function processarEvento(eventoId: string, body: any, orgIdDaUrl: string |
       }
       for (const change of entry?.changes || []) {
         const value = change?.value
+        // Coexistência (número também no aplicativo WhatsApp Business): eco das
+        // mensagens mandadas pelo celular, histórico e contatos. Ver lib/coexistencia.
+        if ((CAMPOS_COEXISTENCIA as readonly string[]).includes(change?.field)) {
+          const orgId = await organizacaoDoEvento(value?.metadata?.phone_number_id, entry?.id) ?? orgIdDaUrl
+          if (!orgId) { resultados.push(`${change.field}: organizacao nao encontrada`); continue }
+          try {
+            resultados.push((await processarCampoCoexistencia(orgId, change)) || change.field)
+          } catch (err: any) {
+            console.error('[Facebook Webhook] coexistencia', err)
+            erros.push(`${change.field}: ${err?.message || err}`)
+          }
+          continue
+        }
+        if (change?.field === 'message_template_status_update') {
+          resultados.push(`template ${value?.message_template_name || ''} ${value?.event || ''}`.trim())
+          continue
+        }
         const mensagens = value?.messages || []
         // Atualizacao de status (entregue/lida) fica so no JSON cru por enquanto.
         if (!mensagens.length) resultados.push(value?.statuses?.length ? 'status' : 'ignorado: sem mensagem')

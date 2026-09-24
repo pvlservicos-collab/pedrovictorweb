@@ -24,6 +24,12 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
     const numeros = await numerosDaWaba(integ.wabaId, integ.token)
     if (!numeros.some((n) => n.id === id)) return apiError(404, 'Número não pertence à conta conectada.')
 
+    // Numero em coexistencia (tambem no aplicativo WhatsApp Business): registrar
+    // ou descadastrar pela API desfaz o vinculo com o aplicativo do celular.
+    if (integ.config.coexistencia && id === integ.config.phone_number_id && (acao === 'registrar' || acao === 'descadastrar')) {
+      return apiError(400, 'Este número está em coexistência com o aplicativo WhatsApp Business. Registrar ou descadastrar pela API tiraria o número do celular.')
+    }
+
     switch (acao) {
       case 'registrar':
         await registrarNumero(id, integ.token)

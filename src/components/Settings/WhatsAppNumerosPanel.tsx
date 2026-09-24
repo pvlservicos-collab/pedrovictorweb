@@ -23,6 +23,7 @@ interface Numero {
 interface Dados {
   waba_id: string
   phone_number_id_ativo: string
+  coexistencia?: boolean
   pagamento: boolean | null
   numeros: Numero[]
 }
@@ -127,8 +128,10 @@ export default function WhatsAppNumerosPanel({ recarregarQuando = 0 }: { recarre
       <div className="space-y-3">
         {dados?.numeros.map((n) => {
           const ativo = n.id === dados.phone_number_id_ativo
+          // Coexistencia: registrar/descadastrar tiraria o numero do aplicativo do celular.
+          const noAplicativo = ativo && !!dados.coexistencia
           const ocupadoAqui = ocupado?.startsWith(`${n.id}:`)
-          const precisaVerificar = n.code_verification_status && n.code_verification_status !== 'VERIFIED' && n.code_verification_status !== 'EXPIRED'
+          const precisaVerificar = !noAplicativo && n.code_verification_status && n.code_verification_status !== 'VERIFIED' && n.code_verification_status !== 'EXPIRED'
           return (
             <div key={n.id} className={`rounded-lg border p-4 ${ativo ? 'border-accent bg-accent/5' : 'border-line bg-panel-2'}`}>
               <div className="flex flex-wrap items-center justify-between gap-2">
@@ -149,18 +152,22 @@ export default function WhatsAppNumerosPanel({ recarregarQuando = 0 }: { recarre
                     </p>
                   </div>
                 </div>
-                {ativo && <span className="text-[10px] font-bold uppercase tracking-wider text-accent">Número do CRM</span>}
+                {ativo && <span className="text-[10px] font-bold uppercase tracking-wider text-accent">Número do CRM{noAplicativo ? ' · também no aplicativo' : ''}</span>}
               </div>
 
               <div className="flex flex-wrap items-center gap-2 mt-3">
                 {!ativo && (
                   <button className={botao} disabled={!!ocupado} onClick={() => agir(n.id, 'usar')}>Usar para enviar</button>
                 )}
-                <button className={botao} disabled={!!ocupado} onClick={() => agir(n.id, 'registrar')}>Registrar</button>
-                <button className={botao} disabled={!!ocupado}
-                  onClick={() => agir(n.id, 'descadastrar', {}, `Descadastrar ${n.display_phone_number}? Ele para de enviar e receber pela API Oficial até ser registrado de novo.`)}>
-                  Descadastrar
-                </button>
+                {!noAplicativo && (
+                  <>
+                    <button className={botao} disabled={!!ocupado} onClick={() => agir(n.id, 'registrar')}>Registrar</button>
+                    <button className={botao} disabled={!!ocupado}
+                      onClick={() => agir(n.id, 'descadastrar', {}, `Descadastrar ${n.display_phone_number}? Ele para de enviar e receber pela API Oficial até ser registrado de novo.`)}>
+                      Descadastrar
+                    </button>
+                  </>
+                )}
                 {precisaVerificar && (
                   <>
                     <button className={botao} disabled={!!ocupado} onClick={() => agir(n.id, 'pedir-codigo', { metodo: 'SMS' })}>Pedir código (SMS)</button>

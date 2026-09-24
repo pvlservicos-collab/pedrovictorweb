@@ -2,7 +2,7 @@
 import { BASE_PATH } from '@/lib/base-path'
 
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { WhatsappLogo, CheckCircle, WarningCircle, CircleNotch, XCircle, ShieldCheck, X } from '@phosphor-icons/react'
+import { WhatsappLogo, CheckCircle, WarningCircle, CircleNotch, XCircle, ShieldCheck, X, DeviceMobile } from '@phosphor-icons/react'
 
 /**
  * Botão "Conectar WhatsApp" — Embedded Signup da Meta (fluxo de Tech Provider).
@@ -28,7 +28,7 @@ interface ConfigES {
   sdk_version: string
   es_version: string
   configs: { id: string; name: string }[]
-  conectado: { waba_id: string; phone_number_id: string; origem: string } | null
+  conectado: { waba_id: string; phone_number_id: string; origem: string; coexistencia?: boolean } | null
 }
 
 interface Sessao {
@@ -38,6 +38,14 @@ interface Sessao {
 }
 
 type Passo = { passo: string; ok: boolean; erro?: string }
+
+/**
+ * 'normal': o numero migra pra API Oficial (sai do aplicativo do celular).
+ * 'coexistencia': numero que ja esta no aplicativo WhatsApp Business continua
+ * nele e tambem entra no CRM (featureType whatsapp_business_app_onboarding;
+ * a Meta mostra um QR code pra escanear no aplicativo). Ver lib/coexistencia.
+ */
+type Modo = 'normal' | 'coexistencia'
 
 function carregarSdk(appId: string, versao: string): Promise<void> {
   return new Promise((resolve) => {
@@ -69,11 +77,13 @@ export default function WhatsAppEmbeddedSignup({ onConectado }: { onConectado?: 
   const [passos, setPassos] = useState<Passo[]>([])
   // Janela 'voce sera direcionado a Meta' antes do popup. O FB.login roda no
   // clique do Continuar com Meta, que tambem e um clique direto: o popup nao e bloqueado.
-  const [confirmando, setConfirmando] = useState(false)
+  // null = janela fechada; senao, qual cadastro o Continuar com Meta abre.
+  const [confirmando, setConfirmando] = useState<Modo | null>(null)
 
   const codigo = useRef<string | null>(null)
   const sessao = useRef<Sessao | null>(null)
   const enviado = useRef(false)
+  const modo = useRef<Modo>('normal')
 
   const carregar = useCallback(async () => {
     setErroCfg(null)
@@ -100,7 +110,7 @@ export default function WhatsAppEmbeddedSignup({ onConectado }: { onConectado?: 
       const res = await fetch(`${BASE_PATH}/api/integrations/whatsapp-cloud/embedded-signup`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ code: codigo.current, ...sessao.current }),
+        body: JSON.stringify({ code: codigo.current, ...sessao.current, modo: modo.current }),
       })
       const j = await res.json().catch(() => ({}))
       if (!res.ok) throw new Error(j.error || 'A conexão não foi concluída.')
@@ -143,8 +153,9 @@ export default function WhatsAppEmbeddedSignup({ onConectado }: { onConectado?: 
     return () => window.removeEventListener('message', ouvir)
   }, [concluir])
 
-  const conectar = () => {
+  const conectar = (qual: Modo) => {
     if (!window.FB || !cfg || !configId) return
+    modo.current = qual
     codigo.current = null
     sessao.current = null
     enviado.current = false
@@ -165,7 +176,12 @@ export default function WhatsAppEmbeddedSignup({ onConectado }: { onConectado?: 
         config_id: configId,
         response_type: 'code',
         override_default_response_type: true,
-        extras: { setup: {}, sessionInfoVersion: '3', version: cfg.es_version },
+        extras: {
+          setup: {},
+          sessionInfoVersion: '3',
+          version: cfg.es_version,
+          ...(qual === 'coexistencia' ? { featureType: 'whatsapp_business_app_onboarding' } : {}),
+        },
       },
     )
   }
@@ -193,7 +209,7 @@ export default function WhatsAppEmbeddedSignup({ onConectado }: { onConectado?: 
             <p className="mt-3 text-sm text-ink flex items-center gap-2">
               <CheckCircle size={16} weight="fill" className="text-emerald-500" />
               Conectado · WABA {cfg.conectado.waba_id} · número {cfg.conectado.phone_number_id}
-              <span className="text-muted">({cfg.conectado.origem === 'embedded_signup' ? 'via Conectar WhatsApp' : 'cadastro manual'})</span>
+              <span className="text-muted">({cfg.conectado.coexistencia ? 'coexistência com o aplicativo' : cfg.conectado.origem === 'embedded_signup' ? 'via Conectar WhatsApp' : 'cadastro manual'})</span>
             </p>
           )}
 
@@ -220,7 +236,7 @@ export default function WhatsAppEmbeddedSignup({ onConectado }: { onConectado?: 
                 </select>
               )}
               <button
-                onClick={() => setConfirmando(true)}
+                onClick={() => setConfirmando('normal')}
                 disabled={!sdkPronto || estado === 'popup' || estado === 'salvando'}
                 className="btn btn-primary inline-flex items-center gap-2 disabled:opacity-50"
               >
@@ -228,6 +244,13 @@ export default function WhatsAppEmbeddedSignup({ onConectado }: { onConectado?: 
                   ? <CircleNotch size={16} className="animate-spin" />
                   : <WhatsappLogo size={16} weight="fill" />}
                 {estado === 'salvando' ? 'Concluindo…' : estado === 'popup' ? 'Aguardando a Meta…' : cfg.conectado ? 'Reconectar WhatsApp Business' : 'Conectar WhatsApp Business'}
+              </button>
+              <button
+                onClick={() => setConfirmando('coexistencia')}
+                disabled={!sdkPronto || estado === 'popup' || estado === 'salvando'}
+                className="btn btn-outline inline-flex items-center gap-2 disabled:opacity-50"
+              >
+                <DeviceMobile size={16} /> Conectar número do WhatsApp Business (coexistência)
               </button>
               {!sdkPronto && !erroCfg && <span className="text-xs text-muted">Carregando o SDK da Meta…</span>}
             </div>
@@ -255,20 +278,29 @@ export default function WhatsAppEmbeddedSignup({ onConectado }: { onConectado?: 
       </div>
 
       {confirmando && (
-        <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black/70 backdrop-blur-sm p-4" onClick={() => setConfirmando(false)}>
+        <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black/70 backdrop-blur-sm p-4" onClick={() => setConfirmando(null)}>
           <div className="w-full max-w-md rounded-2xl bg-panel border border-line shadow-2xl p-6" onClick={(e) => e.stopPropagation()}>
             <div className="flex items-start justify-between gap-3">
-              <h3 className="text-lg font-bold text-ink">Conectar WhatsApp Business</h3>
-              <button onClick={() => setConfirmando(false)} className="p-1 rounded-full hover:bg-panel-2" title="Fechar"><X size={16} className="text-muted" /></button>
+              <h3 className="text-lg font-bold text-ink">{confirmando === 'coexistencia' ? 'Conectar número do WhatsApp Business' : 'Conectar WhatsApp Business'}</h3>
+              <button onClick={() => setConfirmando(null)} className="p-1 rounded-full hover:bg-panel-2" title="Fechar"><X size={16} className="text-muted" /></button>
             </div>
-            <p className="text-sm text-muted mt-3">
-              Você será direcionado ao cadastro seguro da Meta para selecionar sua empresa, a conta do
-              WhatsApp Business e o número. Ao autorizar, você volta para o CRM com o WhatsApp conectado.
-            </p>
+            {confirmando === 'coexistencia' ? (
+              <div className="text-sm text-muted mt-3 space-y-2">
+                <p>Para o número que você já usa no <b className="text-ink">aplicativo WhatsApp Business</b>: ele continua funcionando no celular e passa a funcionar também no CRM.</p>
+                <p>Na janela da Meta, escolha sua empresa e siga até aparecer um <b className="text-ink">QR code</b>. No celular, abra o WhatsApp Business e escaneie o código quando o aplicativo pedir.</p>
+                <p>Deixe o celular com o aplicativo atualizado e por perto.</p>
+              </div>
+            ) : (
+              <p className="text-sm text-muted mt-3">
+                Você será direcionado ao cadastro seguro da Meta para selecionar sua empresa, a conta do
+                WhatsApp Business e o número. Ao autorizar, você volta para o CRM com o WhatsApp conectado.
+                O número informado passa a ser usado pela API Oficial e sai do aplicativo do celular.
+              </p>
+            )}
             <p className="text-xs text-muted mt-3 flex items-center gap-1.5"><ShieldCheck size={14} className="text-emerald-500" />O CRM nunca vê a sua senha do Facebook.</p>
             <div className="mt-6 flex justify-end gap-2">
-              <button onClick={() => setConfirmando(false)} className="btn btn-outline">Cancelar</button>
-              <button onClick={() => { setConfirmando(false); conectar() }} className="btn btn-primary inline-flex items-center gap-2">
+              <button onClick={() => setConfirmando(null)} className="btn btn-outline">Cancelar</button>
+              <button onClick={() => { const qual = confirmando; setConfirmando(null); conectar(qual) }} className="btn btn-primary inline-flex items-center gap-2">
                 <WhatsappLogo size={16} weight="fill" /> Continuar com Meta
               </button>
             </div>
