@@ -26,8 +26,16 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         try {
           if (!credentials?.email || !credentials?.password) return null
 
-          const email = (credentials.email as string).toLowerCase().trim()
+          const login = (credentials.email as string).toLowerCase().trim()
           const password = credentials.password as string
+
+          // O mesmo usuário/senha da porta (CRM_BASIC_USER/PASS) entra na tela de
+          // login como o usuário da entrada automática: uma credencial só pra
+          // decorar, em vez da senha aleatória do seed que ninguém sabe.
+          const porta = process.env.CRM_BASIC_USER?.toLowerCase()
+          const usarPorta = !!porta && !!process.env.CRM_BASIC_PASS && !!process.env.LOGIN_AUTOMATICO_EMAIL
+            && login === porta && password === process.env.CRM_BASIC_PASS
+          const email = usarPorta ? process.env.LOGIN_AUTOMATICO_EMAIL!.toLowerCase() : login
 
           const [user] = await db
             .select({
@@ -45,7 +53,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
           if (!user) return null
 
-          const valid = await bcrypt.compare(password, user.passwordHash)
+          const valid = usarPorta || await bcrypt.compare(password, user.passwordHash)
 
           if (!valid) return null
 
