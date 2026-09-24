@@ -20,6 +20,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { signIn } from '@/lib/auth'
 import { BASE_PATH, comBase } from '@/lib/base-path'
+import { credenciaisRevisor } from '@/lib/revisor'
 
 export async function GET(req: NextRequest) {
   // Interruptor: LOGIN_AUTOMATICO=nao volta a tela de login (cada pessoa com o
@@ -32,8 +33,15 @@ export async function GET(req: NextRequest) {
     return NextResponse.redirect(login)
   }
 
-  const email = process.env.LOGIN_AUTOMATICO_EMAIL
-  const senha = process.env.LOGIN_AUTOMATICO_SENHA
+  // Quem passou pela porta com a credencial do revisor da Meta entra no usuário
+  // dele (lib/revisor), nunca no do dono — a cota de envio vale por usuário.
+  const revisor = credenciaisRevisor()
+  let usuarioDaPorta = ''
+  try { usuarioDaPorta = atob((req.headers.get('authorization') || '').replace(/^Basic\s+/i, '')).split(':')[0].toLowerCase() } catch {}
+  const ehRevisor = !!revisor && usuarioDaPorta === revisor.usuario
+
+  const email = ehRevisor ? revisor!.email : process.env.LOGIN_AUTOMATICO_EMAIL
+  const senha = ehRevisor ? revisor!.senha : process.env.LOGIN_AUTOMATICO_SENHA
 
   if (!email || !senha) {
     return new NextResponse(

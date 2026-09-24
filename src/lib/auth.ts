@@ -12,6 +12,7 @@ import { db } from './db'
 import { users, profiles } from './schema'
 
 import { authConfig } from './auth.config'
+import { credenciaisRevisor } from './revisor'
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   ...authConfig,
@@ -35,7 +36,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           const porta = process.env.CRM_BASIC_USER?.toLowerCase()
           const usarPorta = !!porta && !!process.env.CRM_BASIC_PASS && !!process.env.LOGIN_AUTOMATICO_EMAIL
             && login === porta && password === process.env.CRM_BASIC_PASS
-          const email = usarPorta ? process.env.LOGIN_AUTOMATICO_EMAIL!.toLowerCase() : login
+          // Usuário do revisor da Meta (lib/revisor) também entra pelo apelido; a
+          // senha é conferida normalmente contra o hash do usuário dele.
+          const revisor = credenciaisRevisor()
+          const email = usarPorta
+            ? process.env.LOGIN_AUTOMATICO_EMAIL!.toLowerCase()
+            : revisor && login === revisor.usuario ? revisor.email : login
 
           const [user] = await db
             .select({

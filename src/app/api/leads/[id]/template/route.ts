@@ -16,6 +16,7 @@ import { and, eq, isNull } from 'drizzle-orm'
 import { publishEvent, channels, events } from '@/lib/realtime'
 import { buscarTemplate, enviarTemplate, renderizar } from '@/lib/whatsappTemplates'
 import { isUniqueViolation } from '@/lib/db-helpers'
+import { exigirCotaDeEnvio } from '@/lib/revisor'
 
 const texto = (v: unknown) => (Array.isArray(v) ? v.map((x) => String(x ?? '').trim()) : [])
 
@@ -45,6 +46,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
       return apiError(400, 'Preencha todas as variáveis do template.')
     }
 
+    await exigirCotaDeEnvio(auth)
     const { messageId, waId } = await enviarTemplate(auth.organizationId, lead.phone, template, valores, valoresCabecalho)
     const conteudo = renderizar(template, valores, valoresCabecalho)
 

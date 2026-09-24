@@ -10,6 +10,7 @@ import { getChannelAdapter } from '@/lib/channels/registry'
 import { integrations } from '@/lib/schema'
 import { isOrgAdmin } from '@/lib/admin-auth'
 import { isUniqueViolation } from '@/lib/db-helpers'
+import { exigirCotaDeEnvio } from '@/lib/revisor'
 
 const CHANNEL_LABELS: Record<string, string> = {
   whatsapp_zapi: 'Z-API',
@@ -201,6 +202,9 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
 
     // Determina o canal de envio pelo integration_id do lead
     if (direction === 'outbound' && body.type === 'whatsapp' && !body.skip_send) {
+      // Conta do revisor da Meta tem cota de envio (lib/revisor). Antes de tudo:
+      // estourou, nada sai e nada é gravado.
+      await exigirCotaDeEnvio(auth)
       const phone = lead?.phone || decodedPhone
 
       // Lookup lead's integration type

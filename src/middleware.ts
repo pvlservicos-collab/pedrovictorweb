@@ -18,7 +18,12 @@ function portaLiberada(req: NextRequest): boolean | null {
   const cabecalho = req.headers.get('authorization') || ''
   if (!cabecalho.startsWith('Basic ')) return false
   try {
-    return atob(cabecalho.slice(6).trim()) === `${usuario}:${senha}`
+    const par = atob(cabecalho.slice(6).trim())
+    if (par === `${usuario}:${senha}`) return true
+    // Conta do revisor da Meta (lib/revisor): segunda credencial da porta.
+    const rUser = process.env.CRM_REVISOR_USER
+    const rPass = process.env.CRM_REVISOR_PASS
+    return !!rUser && !!rPass && par === `${rUser}:${rPass}`
   } catch {
     return false
   }
