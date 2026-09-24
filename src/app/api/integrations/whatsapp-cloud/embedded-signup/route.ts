@@ -32,6 +32,10 @@ export async function GET(req: NextRequest) {
       configuracoesTechProvider().catch(() => [] as { id: string; name: string }[]),
       lerIntegracaoCloud(auth.organizationId),
     ])
+    // A configuração escolhida (FB_ES_CONFIG_ID) vem primeiro: é a que a tela
+    // seleciona. A ordem da Meta muda quando se cria uma configuração nova.
+    const preferida = process.env.FB_ES_CONFIG_ID
+    configs.sort((a, b) => Number(b.id === preferida) - Number(a.id === preferida))
     return Response.json({
       app_id: appId,
       sdk_version: GRAPH_VERSION,
